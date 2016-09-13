@@ -47,4 +47,6 @@ public class CP2406A1 {
     private static void showGreeting(){
         System.out.println("Welcome to the Super Trump Game.");
     }
+
+
 }
