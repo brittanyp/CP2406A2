@@ -11,9 +11,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class ReadFile {
-    ArrayList<String> deck = new ArrayList<String>();
+
 
     public static void main(String[] args) throws Exception{
+        ArrayList<ArrayList> deck = new ArrayList<ArrayList>();
+        ArrayList<Object> card = new ArrayList<Object>();
+        ArrayList<String> occurrenceArray = new ArrayList<String>();
+
         //Build document
         File xmlFile = new File("F:\\Uni\\SP_3_IT\\CP2406\\Assignment1\\CP2406A1\\CP2406A1\\MstCards_151021v3.xml");
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -43,20 +47,40 @@ public class ReadFile {
             if (cardType.equals("play")) {
                 System.out.println("---------" + i + "---------");
                 //Adds first 6 NormalDetails
-                addNormalDetails(cardElement, 0, 6);
+                addNormalDetails(cardElement, 0, 6, card);
+
                 //ArrayDetail start
-                int amntinArray = addArrayDetail(cardElement);
+                Node theValueNode = cardElement.getElementsByTagName("array").item(0);
+                Element valueElement = (Element) theValueNode;
+                NodeList array = valueElement.getElementsByTagName("string");
+                int amntinArray = array.getLength();
+                //Todo: Delete this line below, testing
+                //System.out.println("    Amt in array: " + amntinArray + "\n     " + (amntinArray + 6));
+                //Iterate through array details
+                for (int x = 0; x < array.getLength(); x++) {
+                    System.out.println(array.item(x).getTextContent());
+                    occurrenceArray.add(array.item(x).getTextContent());
+                }
+                card.add(occurrenceArray);
+                //int amntinArray = addArrayDetail(cardElement);
+
                 //Adds the rest of NormalDetails
-                addNormalDetails(cardElement, 6 + amntinArray, (14 - 3 + amntinArray));
+                addLastNormalDetails(cardElement, 6 + amntinArray, (14 - 3 + amntinArray), card);
+                deck.add(i, card);
+                card = new ArrayList<Object>();
+                //card.clear();
+                //occurrenceArray.clear();
+                occurrenceArray = new ArrayList<String>();
             }
             else{
                 System.out.println("Trump card");
             }
         }
-
+        System.out.println("Stop here");
     }
 
-    public static void addNormalDetails(Element cElement, int start, int end){
+    public static void addNormalDetails(Element cElement, int start, int end, ArrayList<Object> cardArray){
+        ArrayList<Object> card = cardArray;
         Element cardElement = cElement;
         int indexStart = start;
         int indexEnd = end;
@@ -66,7 +90,25 @@ public class ReadFile {
             //Normal Detail
             Node theValueNode = cardElement.getElementsByTagName("string").item(index);
             Element valueElement = (Element) theValueNode;
+            card.add(index ,valueElement.getTextContent());
             System.out.println(valueElement.getTextContent());
+        }
+    }
+    public static void addLastNormalDetails(Element cElement, int start, int end, ArrayList<Object> cardArray){
+        ArrayList<Object> card = cardArray;
+        Element cardElement = cElement;
+        int indexStart = start;
+        int indexEnd = end;
+        int okay = 7;
+        //int i = indexI;
+        //Iterate through details
+        for (int index = indexStart; index < indexEnd; index++) {
+            //Normal Detail
+            Node theValueNode = cardElement.getElementsByTagName("string").item(index);
+            Element valueElement = (Element) theValueNode;
+            card.add(okay, valueElement.getTextContent());
+            System.out.println(valueElement.getTextContent());
+            okay= okay + 1;
         }
     }
     public static int addArrayDetail(Element cElement){
