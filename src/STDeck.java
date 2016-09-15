@@ -8,7 +8,7 @@ public class STDeck {
     public STDeck(){
        cards = new ArrayList<STCard>();
         for (int i = 0; i < INIT_NUM_CARDS; i++) {
-             cards.add(new STCard(i));
+             //cards.add(new STCard(i));
 
             //google how to create random array of integers (no repeats)
 

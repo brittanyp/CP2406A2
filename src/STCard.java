@@ -1,13 +1,21 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * Created by Brit on 9/11/2016.
  */
 public class STCard {
-    private int id;
+    public int id;
+    public String fileName, imageName, card_type, title;
 
-public STCard(int id){
+    ArrayList<Object> card = new ArrayList<Object>();
+
+public STCard(int id, String fileName, String imageName, String card_type, String title){
     this.id = id;
-}
-public String toString(){
-    return "id= " + id;
-}
+    this.fileName = fileName;
+    this.imageName = imageName;
+    this.card_type = card_type;
+    this.title = title;
+    }
 }
