@@ -38,6 +38,10 @@ public class STPlayCard extends STCard {
         return occurrence;
     }
 
+    public String getHardness(){
+        return hardness;
+    }
+
 //    public String getHardness(){
 //        String str;
 //        str=hardness.split("-")[1];

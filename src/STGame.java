@@ -29,8 +29,9 @@ public class STGame {
 
         }
         for (STPlayer player : players) {
-            ArrayList<STCard> cards = deck.dealCards(NUM_OF_CARDS_TO_DEAL);
-            player.setCards(cards);
+            //todo: undo comments on 2 lines below
+            //ArrayList<STCard> cards = deck.dealCards(NUM_OF_CARDS_TO_DEAL);
+            //player.setCards(cards);
         }
     }
 

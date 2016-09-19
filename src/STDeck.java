@@ -4,10 +4,10 @@ import java.util.Random;
 
 public class STDeck {
     private static final int INIT_NUM_CARDS = 60;
-    private ArrayList deck;
+    private ArrayList<Object> deck;
 
     public STDeck(){
-       deck = new ArrayList<>();
+       deck = new ArrayList<Object>();
         //for (int i = 0; i < INIT_NUM_CARDS; i++) {
              //cards.add(new STCard(i));
 
@@ -35,7 +35,7 @@ public class STDeck {
     }
 
     public STPlayCard getCard(int index){
-       STPlayCard card = deck.get(index);
+        STPlayCard card = (STPlayCard) deck.get(index);
         return card;
     }
 
