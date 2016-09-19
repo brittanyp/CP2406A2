@@ -21,18 +21,42 @@ public class STPlayCard extends STCard {
         this.crustal_abundance = crustal_abundance;
         this.economic_value = economic_value;
     }
+
+    public String getChemistry(){
+        return chemistry;
+    }
+
+    public String getClassification(){
+        return classification;
+    }
+
+    public String getCrystal_system(){
+        return crystal_system;
+    }
+
+    public ArrayList<String> getOccurrence(){
+        return occurrence;
+    }
+
+//    public String getHardness(){
+//        String str;
+//        str=hardness.split("-")[1];
+//        //double highestHardness;
+//        return str;
+//    }
+
     public void toPrntString(){
-        System.out.println("Title - " + title);
-        System.out.println("Card Type - " + card_type);
-        System.out.println("Chemistry - " + chemistry);
-        System.out.println("Classification - " + classification);
-        System.out.println("Crystal System  - " + crystal_system);
-        System.out.println("Occurrence  - " + occurrence.toString());
-        System.out.println("Hardness  - " + hardness);
-        System.out.println("Specific Gravity  - " + specific_gravity);
-        System.out.println("Cleavage  - " + cleavage);
-        System.out.println("Crustal Abundance  - " + crustal_abundance);
-        System.out.println("Economic Value  - " + economic_value);
+        System.out.println("Title: " + title);
+        System.out.println("Card Type: " + card_type);
+        System.out.println("Chemistry: " + chemistry);
+        System.out.println("Classification: " + classification);
+        System.out.println("Crystal System: " + crystal_system);
+        System.out.println("Occurrence: " + occurrence.toString());
+        System.out.println("Hardness: " + hardness);
+        System.out.println("Specific Gravity: " + specific_gravity);
+        System.out.println("Cleavage: " + cleavage);
+        System.out.println("Crustal Abundance: " + crustal_abundance);
+        System.out.println("Economic Value: " + economic_value);
 
     }
 }

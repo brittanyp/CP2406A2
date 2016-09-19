@@ -1,6 +1,7 @@
 /**
  * Created by Brit on 9/13/2016.
  */
+//Todo: Put cards into deck, return deck
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 public class ReadFile {
 
     public static void main(String[] args) throws Exception{
-        ArrayList<STCard> deck = new ArrayList<STCard>();
+        STDeck deck = new STDeck();
         ArrayList <Object> card = new ArrayList<Object> ();
         ArrayList<String> occurrenceArray = new ArrayList<String>();
 
@@ -42,9 +43,10 @@ public class ReadFile {
             String cardType = cardTypeElement.getTextContent();
             //Todo: Delete this line below, testing
             //System.out.println(cardType);
+            System.out.println("---------" + i + "---------");
 
             if (cardType.equals("play")) {
-                System.out.println("---------" + i + "---------");
+
                 //Adds first 6 NormalDetails
                 addNormalDetails(cardElement, 0, 6, card);
 
@@ -57,11 +59,11 @@ public class ReadFile {
                 //System.out.println("    Amt in array: " + amntinArray + "\n     " + (amntinArray + 6));
                 //Iterate through array details
                 for (int x = 0; x < array.getLength(); x++) {
-                    System.out.println(array.item(x).getTextContent());
+                    //Todo: Delete this line below, testing
+                    //System.out.println(array.item(x).getTextContent());
                     occurrenceArray.add(array.item(x).getTextContent());
                 }
                 card.add(occurrenceArray);
-                //int amntinArray = addArrayDetail(cardElement);
 
                 //Adds the rest of NormalDetails
                 addLastNormalDetails(cardElement, 6 + amntinArray, (14 - 3 + amntinArray), card);
@@ -74,19 +76,22 @@ public class ReadFile {
                         card.get(11).toString());
                 occurrenceArray = new ArrayList<String>();
                 card = new ArrayList<Object> ();
-                deck.add(i, completeCard);
-                completeCard.toPrntString();
-
+                deck.addPlayCard(i, completeCard);
+                //Todo: Delete this line below, testing
+                //completeCard.toPrntString();
+                System.out.println(deck.getCard(i).getFileName());
+                System.out.println(deck.getCard(i).getHardness());
 
             }
             else if(cardType.equals("trump")){
-                System.out.println("Trump card");
+                //Todo: Delete this line below, testing
+                //System.out.println("Trump card");
                 addNormalDetails(cardElement, 0, 4, card);
                 STTrumpCard completeCard = new STTrumpCard(i, card.get(0).toString(), card.get(1).toString(),
                         cardType, card.get(2).toString(), card.get(3).toString());
                 card = new ArrayList<Object> ();
-                deck.add(i, completeCard);
-                completeCard.toPrntString();
+                deck.addTrumpCard(i, completeCard);
+                System.out.println(deck.getCard(i).toString());
             }
         }
     }
@@ -103,7 +108,8 @@ public class ReadFile {
             Node theValueNode = cardElement.getElementsByTagName("string").item(index);
             Element valueElement = (Element) theValueNode;
             card.add(index ,valueElement.getTextContent());
-            System.out.println(valueElement.getTextContent());
+            //Todo: Delete this line below, testing
+            //System.out.println(valueElement.getTextContent());
         }
     }
     public static void addLastNormalDetails(Element cElement, int start, int end, ArrayList<Object> cardArray){
@@ -119,7 +125,8 @@ public class ReadFile {
             Node theValueNode = cardElement.getElementsByTagName("string").item(index);
             Element valueElement = (Element) theValueNode;
             card.add(okay, valueElement.getTextContent());
-            System.out.println(valueElement.getTextContent());
+            //Todo: Delete this line below, testing
+            //System.out.println(valueElement.getTextContent());
             okay= okay + 1;
         }
     }
