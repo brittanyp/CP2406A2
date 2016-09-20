@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class ReadFile {
 
-    public static void main(String[] args) throws Exception{
+    public static STDeck ReadTheFile() throws Exception{
         STDeck deck = new STDeck();
         ArrayList <Object> card = new ArrayList<Object> ();
         ArrayList<String> occurrenceArray = new ArrayList<String>();
@@ -41,9 +41,9 @@ public class ReadFile {
             Node cardTypeNode = cardElement.getElementsByTagName("key").item(3);
             Element cardTypeElement = (Element) cardTypeNode;
             String cardType = cardTypeElement.getTextContent();
-            //Todo: Delete this line below, testing
+            //Todo: Delete these 2 lines below, testing
             //System.out.println(cardType);
-            System.out.println("---------" + i + "---------");
+            //System.out.println("---------" + i + "---------");
 
             if (cardType.equals("play")) {
 
@@ -79,8 +79,9 @@ public class ReadFile {
                 deck.addPlayCard(i, completeCard);
                 //Todo: Delete this line below, testing
                 //completeCard.toPrntString();
-                System.out.println(deck.getCard(i).getFileName());
-                System.out.println(deck.getCard(i).getHardness());
+                //Todo: Delete these 2 line below, testing
+                //System.out.println(deck.getPCard(i).getFileName());
+                //System.out.println(deck.getPCard(i).getHardness());
 
             }
             else if(cardType.equals("trump")){
@@ -91,9 +92,11 @@ public class ReadFile {
                         cardType, card.get(2).toString(), card.get(3).toString());
                 card = new ArrayList<Object> ();
                 deck.addTrumpCard(i, completeCard);
-                System.out.println(deck.getCard(i).toString());
+                //Todo: Delete this line below, testing
+                //System.out.println(deck.getTCard(i).getSubtitle());
             }
         }
+        return deck;
     }
 
     public static void addNormalDetails(Element cElement, int start, int end, ArrayList<Object> cardArray){
@@ -117,17 +120,17 @@ public class ReadFile {
         Element cardElement = cElement;
         int indexStart = start;
         int indexEnd = end;
-        int okay = 7;
+        int placement = 7;
         //int i = indexI;
         //Iterate through details
         for (int index = indexStart; index < indexEnd; index++) {
             //Normal Detail
             Node theValueNode = cardElement.getElementsByTagName("string").item(index);
             Element valueElement = (Element) theValueNode;
-            card.add(okay, valueElement.getTextContent());
+            card.add(placement, valueElement.getTextContent());
             //Todo: Delete this line below, testing
             //System.out.println(valueElement.getTextContent());
-            okay= okay + 1;
+            placement= placement + 1;
         }
     }
 }

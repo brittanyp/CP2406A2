@@ -42,6 +42,21 @@ public class STPlayCard extends STCard {
         return hardness;
     }
 
+    public String getSpecific_gravity(){
+        return specific_gravity;
+    }
+
+    public String getCleavage(){
+        return cleavage;
+    }
+
+    public String getCrustal_abundance(){
+        return crustal_abundance;
+    }
+    public String getEconomic_value(){
+        return economic_value;
+    }
+
 //    public String getHardness(){
 //        String str;
 //        str=hardness.split("-")[1];

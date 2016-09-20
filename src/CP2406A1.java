@@ -1,6 +1,14 @@
 /**
  * Created by Brit on 9/11/2016.
  */
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.ArrayList;
+
 public class CP2406A1 {
 
     private static final int NEW_GAME = 1;
@@ -9,26 +17,35 @@ public class CP2406A1 {
         showMenu();
         int selection = getUserChoiceMenu();
         STGame game;
-        if (selection == NEW_GAME){
-           game = beginNewGame();
-            game.playGame();
 
+        if (selection == NEW_GAME) {
+            STDeck deck = null;
+            try {
+               deck = ReadFile.ReadTheFile();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+               game = beginNewGame(deck);
+               game.playGame();
         }
     }
 
-    private static STGame beginNewGame() {
+    private static STGame beginNewGame(STDeck deck) {
         int numOfPlayers = getNumOfPlayers();
-        STGame game = new STGame(numOfPlayers);
+        STGame game = new STGame(numOfPlayers, deck);
+        //deck.getPCard(0).toPrntString();
         game.chooseDealer();
         game.dealRandomCardsToEachPlayer();
         game.selectPlayerPostion();
        STPlayer humanPlayer = game.getHumanPlayer();
-        showPlayer(humanPlayer);
+        //Todo: remove line below
+        //showPlayer(humanPlayer);
         return game;
     }
 
     private static void showPlayer(STPlayer humanPlayer) {
         System.out.println("Human Player: " + humanPlayer);
+        //System.out.println("Id: " + humanPlayer.getID());
     }
 
     private static int getUserChoiceMenu() {
@@ -47,6 +64,5 @@ public class CP2406A1 {
     private static void showGreeting(){
         System.out.println("Welcome to the Super Trump Game.");
     }
-
 
 }

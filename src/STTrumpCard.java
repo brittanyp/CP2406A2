@@ -8,9 +8,15 @@ public class STTrumpCard extends STCard {
         this.subtitle = subtitle;
     }
 
+    public String getSubtitle(){
+        return subtitle;
+    }
+
     public void toPrntString(){
         System.out.println("Title - " + title);
         System.out.println("Card Type - " + card_type);
         System.out.println("Subtitle - " + subtitle);
     }
+
+
 }

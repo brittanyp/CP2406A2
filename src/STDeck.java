@@ -15,17 +15,29 @@ public class STDeck {
 
         //}
     }
-/*    public ArrayList<STCard> dealCards(int nCards) {
-        ArrayList<STCard> ret = new ArrayList<STCard>();
+   public ArrayList<Object> dealCards(int nCards) {
+        ArrayList<Object> hand = new ArrayList<Object>();
         for (int i = 0; i < nCards; i++){
             int index = new Random().nextInt((deck.size()));
-            STCard card = deck.remove(index);
-            ret.add(card);
-            System.out.println(card.toString());
+            STCard selectedCard = (STCard) deck.get(index);
+            if (selectedCard.getCard_type().equals("play")) {
+                STPlayCard card = (STPlayCard) deck.remove(index);
+                //deck.remove(index);
+                hand.add(card);
+                //Todo: remove line below
+                //card.toPrntString();
+            }
+            if (selectedCard.getCard_type().equals("trump")) {
+                STTrumpCard card = (STTrumpCard) deck.remove(index);
+                //deck.remove(index);
+                hand.add(card);
+                //Todo: remove line below
+                //card.toPrntString();
+            }
         }
-        return ret;
+        return hand;
     }
-*/
+
     public void addPlayCard(int index, STPlayCard card){
         deck.add(index, card);
     }
@@ -34,8 +46,13 @@ public class STDeck {
         deck.add(index, card);
     }
 
-    public STPlayCard getCard(int index){
+    public STPlayCard getPCard(int index){
         STPlayCard card = (STPlayCard) deck.get(index);
+        return card;
+    }
+
+    public STTrumpCard getTCard(int index){
+        STTrumpCard card = (STTrumpCard) deck.get(index);
         return card;
     }
 
