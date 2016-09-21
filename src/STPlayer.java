@@ -7,9 +7,11 @@ import java.util.ArrayList;
 public class STPlayer {
     private ArrayList<Object> hand;
     private int playerID;
+    boolean playerSkip = false;
 
     public STPlayer(int playerID) {
         this.playerID = playerID;
+
     }
 
     public void setHand(ArrayList<Object> hand) {
@@ -22,6 +24,14 @@ public class STPlayer {
 
     public int getID(){
         return playerID;
+    }
+
+    public boolean getPlayerSkip(){
+        return playerSkip;
+    }
+
+    public void setPlayerSkip(boolean skipSelection){
+        playerSkip = skipSelection;
     }
 
     public String toString(){
