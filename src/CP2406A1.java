@@ -48,7 +48,7 @@ public class CP2406A1 {
     }
     private static int getNumOfPlayers() {
         //todo: create function
-        return 3;
+        return 2;
     }
 
     private static void showMenu(){
