@@ -19,6 +19,7 @@ public class STGame {
     private String PlayingCategory;
     String PlayingCategoryValue;
     STCard playedCard;
+    ArrayList<STPlayer> playersSkipped = new ArrayList<STPlayer>();
 
     public STGame(int numOfPlayers, STDeck deck) {
         this.numOfPlayers = numOfPlayers;
@@ -47,6 +48,7 @@ public class STGame {
         int cardSelection;
         boolean gameIsOn = true;
         boolean cardValid = false;
+
 
         resetPlayedCard(getRandomCategory());
 
@@ -89,7 +91,10 @@ public class STGame {
                         }
                         STCard cardSelected = (STCard) hand.get(cardSelection);
                         if (cardSelected.getCard_type().equals("play")) {
-                        compareCategory(cardSelected, true);}
+                            compareCategory(cardSelected, true);
+                            System.out.println("---------- Card last Played ----------");
+                            printCard(playedCard);
+                        }
                         else {
                             STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
                             resetAllPlayerSkip();
@@ -99,6 +104,7 @@ public class STGame {
                                         "4. Crustal abundance\n5. Economic Value");
                                 Scanner in = new Scanner(System.in);
                                 int userChoice = in.nextInt();
+                                System.out.println(userChoice);
                                 while (userChoice > 5 || userChoice < 1) {
                                     System.out.println("Invalid Choice");
                                     userChoice = in.nextInt();
@@ -122,18 +128,18 @@ public class STGame {
                                         break;
                                 }
                                 resetPlayedCard(category);
+                                System.out.println("---------- Card last Played ----------");
+                                printCard(playedCard);
                             }
+                            System.out.println("---------- Card last Played ----------");
+                            printCard(selectedTrumpCard);
                             resetPlayedCard(selectedTrumpCard.getSubtitle());
                         }
-
                         hand.remove(cardSelection);
                     } else {
                         System.out.println("You have no valid cards to play, you will be skipped until a trump card is played");
                         selectedPlayer.setPlayerSkip(true);
                     }
-                    //Show last played Card
-                    System.out.println("---------- Card last Played ----------");
-                    printCard(playedCard);
                     //}
                     //gameIsOn = askIfExit();
 
@@ -213,8 +219,8 @@ public class STGame {
     }
 
     private boolean compareCategory(Object object, boolean setValue) {
-        double Level = 0;
-        double currentLevel = 0;
+        int Level = 0;
+        int currentLevel = 0;
         String tempString;
         String newValue = "";
         boolean valid = false;
@@ -300,7 +306,7 @@ public class STGame {
                 }
                 if (Level > currentLevel){
                     valid = true;
-                    newValue = Double.toString(Level);
+                    newValue = playCard.getCrustal_abundance();
                 }
                 break;
 
@@ -347,7 +353,7 @@ public class STGame {
                 }
                 if (Level > currentLevel){
                     valid = true;
-                    newValue = Double.toString(Level);
+                    newValue = playCard.getEconomic_value();
                 }
                 break;
 
@@ -448,7 +454,7 @@ public class STGame {
                 }
                 if (Level > currentLevel){
                     valid = true;
-                    newValue = Double.toString(Level);
+                    newValue = playCard.getCleavage();
                 }
                 break;
         }
