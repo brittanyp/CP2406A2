@@ -128,12 +128,13 @@ public class STGame {
                                         break;
                                 }
                                 resetPlayedCard(category);
-                                System.out.println("---------- Card last Played ----------");
-                                printCard(playedCard);
+
+                            }
+                            else{
+                                resetPlayedCard(selectedTrumpCard.getSubtitle());
                             }
                             System.out.println("---------- Card last Played ----------");
                             printCard(selectedTrumpCard);
-                            resetPlayedCard(selectedTrumpCard.getSubtitle());
                         }
                         hand.remove(cardSelection);
                     } else {
