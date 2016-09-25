@@ -9,10 +9,10 @@ public class CP2406A1 {
     public static void main(String[] args) {
         showGreeting();
         showMenu();
-        int selection = getUserChoiceMenu();
+        int menuChoice = getUserChoiceMenu();
         STGame game;
 
-        if (selection == NEW_GAME) {
+        if (menuChoice == NEW_GAME) {
             STDeck deck = null;
             try {
                deck = ReadFile.ReadTheFile();
@@ -27,11 +27,11 @@ public class CP2406A1 {
     private static STGame beginNewGame(STDeck deck) {
         int numOfPlayers = getNumOfPlayers();
         STGame game = new STGame(numOfPlayers, deck);
-        //deck.getPCard(0).toPrntString();
         game.chooseDealer();
         game.dealRandomCardsToEachPlayer();
         game.selectPlayerPostion();
-       STPlayer humanPlayer = game.getHumanPlayer();
+        //Todo: remove line below
+       //STPlayer humanPlayer = game.getHumanPlayer();
         //Todo: remove line below
         //showPlayer(humanPlayer);
         return game;
@@ -48,7 +48,7 @@ public class CP2406A1 {
     }
     private static int getNumOfPlayers() {
         //todo: create function
-        return 2;
+        return 3;
     }
 
     private static void showMenu(){

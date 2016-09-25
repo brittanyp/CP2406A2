@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/STGame.java" line="169" />
+    <bookmark url="file://$PROJECT_DIR$/src/STGame.java" line="220" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3e715842-1741-4b5d-95ba-eaa0e7c9c3b0" name="Default" comment="" />
@@ -28,8 +28,8 @@
       <file leaf-file-name="MstCards_151021v3.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MstCards_151021v3.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42398">
-              <caret line="2494" column="60" selection-start-line="2494" selection-start-column="20" selection-end-line="2494" selection-end-column="60" />
+            <state relative-caret-position="602">
+              <caret line="2491" column="33" selection-start-line="2491" selection-start-column="20" selection-end-line="2491" selection-end-column="33" />
               <folding />
             </state>
           </provider>
@@ -38,35 +38,47 @@
       <file leaf-file-name="STPlayCard.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/STPlayCard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+            <state relative-caret-position="223">
+              <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
               <folding>
-                <element signature="e#1740#1741#0" expanded="true" />
+                <element signature="e#1435#1436#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CP2406A1.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CP2406A1.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/CP2406A1.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+            <state relative-caret-position="306">
+              <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="STGame.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="STGame.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/STGame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-964">
-              <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
+            <state relative-caret-position="4590">
+              <caret line="270" column="13" selection-start-line="270" selection-start-column="13" selection-end-line="270" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#628#638#0" expanded="true" />
-                <element signature="e#2362#2371#0" expanded="true" />
-                <element signature="e#5431#5440#0" expanded="true" />
+                <element signature="e#804#814#0" expanded="true" />
+                <element signature="e#4330#4339#0" expanded="true" />
+                <element signature="e#7587#7596#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="STCard.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/STCard.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="391">
+              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+              <folding>
+                <element signature="e#783#784#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,9 +87,14 @@
       <file leaf-file-name="STDeck.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/STDeck.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-              <folding />
+            <state relative-caret-position="679">
+              <caret line="58" column="38" selection-start-line="58" selection-start-column="38" selection-end-line="58" selection-end-column="38" />
+              <folding>
+                <element signature="e#1385#1386#0" expanded="true" />
+                <element signature="e#1422#1423#0" expanded="true" />
+                <element signature="e#1482#1483#0" expanded="true" />
+                <element signature="e#1519#1520#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -130,9 +147,9 @@
         <option value="$PROJECT_DIR$/src/STTrumpCard.java" />
         <option value="$PROJECT_DIR$/src/STPlayCard.java" />
         <option value="$PROJECT_DIR$/src/ReadFile.java" />
-        <option value="$PROJECT_DIR$/src/STDeck.java" />
         <option value="$PROJECT_DIR$/MstCards_151021v3.xml" />
         <option value="$PROJECT_DIR$/src/STPlayer.java" />
+        <option value="$PROJECT_DIR$/src/STDeck.java" />
         <option value="$PROJECT_DIR$/src/CP2406A1.java" />
         <option value="$PROJECT_DIR$/src/STGame.java" />
       </list>
@@ -668,15 +685,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/STGame.java</url>
-          <line>49</line>
+          <line>276</line>
           <properties />
-          <option name="timeStamp" value="149" />
+          <option name="timeStamp" value="174" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/STGame.java</url>
+          <line>414</line>
+          <properties />
+          <option name="timeStamp" value="175" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/STGame.java</url>
+          <line>100</line>
+          <properties />
+          <option name="timeStamp" value="178" />
         </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="152" />
+      <option name="time" value="179" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
@@ -914,6 +943,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="50" selection-start-line="18" selection-start-column="50" selection-end-line="18" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="false" />
+            <element signature="e#239#247#0" expanded="false" />
+            <element signature="e#296#304#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -955,37 +989,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/STCard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="35" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MstCards_151021v3.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42398">
-          <caret line="2494" column="60" selection-start-line="2494" selection-start-column="20" selection-end-line="2494" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/STPlayCard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
-          <folding>
-            <element signature="e#1740#1741#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/STDeck.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="19" column="41" selection-start-line="19" selection-start-column="41" selection-end-line="19" selection-end-column="41" />
-          <folding />
+        <state relative-caret-position="679">
+          <caret line="58" column="38" selection-start-line="58" selection-start-column="38" selection-end-line="58" selection-end-column="38" />
+          <folding>
+            <element signature="e#1385#1386#0" expanded="true" />
+            <element signature="e#1422#1423#0" expanded="true" />
+            <element signature="e#1482#1483#0" expanded="true" />
+            <element signature="e#1519#1520#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1000,24 +1013,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/STGame.java">
+    <entry file="file://$PROJECT_DIR$/src/STPlayCard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-964">
-          <caret line="52" column="12" selection-start-line="52" selection-start-column="12" selection-end-line="52" selection-end-column="12" />
+        <state relative-caret-position="223">
+          <caret line="41" column="0" selection-start-line="41" selection-start-column="0" selection-end-line="41" selection-end-column="0" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#628#638#0" expanded="true" />
-            <element signature="e#2362#2371#0" expanded="true" />
-            <element signature="e#5431#5440#0" expanded="true" />
+            <element signature="e#1435#1436#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/STCard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+          <folding>
+            <element signature="e#783#784#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MstCards_151021v3.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="602">
+          <caret line="2491" column="33" selection-start-line="2491" selection-start-column="20" selection-end-line="2491" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/CP2406A1.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="23" selection-start-line="9" selection-start-column="23" selection-end-line="9" selection-end-column="23" />
+        <state relative-caret-position="306">
+          <caret line="18" column="35" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/STGame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4590">
+          <caret line="270" column="13" selection-start-line="270" selection-start-column="13" selection-end-line="270" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#804#814#0" expanded="true" />
+            <element signature="e#4330#4339#0" expanded="true" />
+            <element signature="e#7587#7596#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -56,4 +56,10 @@ public class STDeck {
         return card;
     }
 
+    public STCard getRandomSingleCard() {
+        int randomInt = new Random().nextInt((deck.size()));
+        STCard card = (STCard) deck.get(randomInt);
+        deck.remove(randomInt);
+        return card;
+    }
 }

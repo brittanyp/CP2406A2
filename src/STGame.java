@@ -2,8 +2,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-//Todo: create if robot is playing
-//Todo: add card from deck to hand if skip is true
+//Todo: Add first player gets to select card
+//Todo: Add option to pass instead of put down card
+//Todo: add geophysicist card and magnetite card option (they win)
+//Todo: Continues til all but one player has lost their cards (Maybe, stupid rule I dont like it)
 
 
 /**
@@ -45,9 +47,58 @@ public class STGame {
         }
     }
 
-    public void playGame() {
+    public void dealSingleCardToPlayer(ArrayList<Object> hand){
+        STCard card=deck.getRandomSingleCard();
+        hand.add(card);
+    }
 
-        resetPlayedCard(getRandomCategory());
+    public void playGame() {
+        String category="";
+
+        if(players[0].getID()==humanplayerID) {
+            ArrayList<Object> hand = (ArrayList<Object>) players[0].getHand();
+            int x = 0;
+            for (Object card : hand) {
+                STCard transformedCard = (STCard) card;
+                System.out.println("---------- Card " + x + " ----------");
+                printCard(transformedCard);
+                System.out.println("");
+                x = x + 1;
+            }
+            System.out.println("-----------------------------");
+
+            System.out.println("You are the first player\n" +
+                    "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
+                    "4. Crustal abundance\n5. Economic Value");
+            Scanner in = new Scanner(System.in);
+            int userChoice = in.nextInt();
+            while (userChoice > 5 || userChoice < 1) {
+                System.out.println("Invalid Choice");
+                userChoice = in.nextInt();
+            }
+            switch (userChoice) {
+                case 1:
+                    category = "hardness";
+                    break;
+                case 2:
+                    category = "specific gravity";
+                    break;
+                case 3:
+                    category = "cleavage";
+                    break;
+                case 4:
+                    category = "crustal abundance";
+                    break;
+                case 5:
+                    category = "economic value";
+                    break;
+            }
+        }
+        else{
+            category = getRandomCategory();
+        }
+
+        resetPlayedCard(category);
 
         while (gameIsOn) {
             boolean playerWin = false;
@@ -107,6 +158,7 @@ public class STGame {
                     compareCategory(cardSelected, true);
                     System.out.println("---------- Card last Played ----------");
                     printCard(playedCard);
+                    System.out.println("--------------------------");
                 } else {
                     STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
                     resetAllPlayerSkip();
@@ -117,12 +169,14 @@ public class STGame {
                     }
                     System.out.println("---------- Card last Played ----------");
                     printCard(selectedTrumpCard);
+                    System.out.println("--------------------------");
                 }
                 hand.remove(cardSelection);
             } else {
                 System.out.println("You have no valid cards to play, you will be skipped until a trump card is played");
                 selectedPlayer.setPlayerSkip(true);
-                if(checkAllPlayersSkip()){
+                dealSingleCardToPlayer(hand);
+                if(checkResetPlayersSkip()){
                     resetPlayedCard(getRandomCategory());
                     resetAllPlayerSkip();
                 }
@@ -160,9 +214,6 @@ public class STGame {
                 if (cardValid) {
                     validCards.add(x);
                 }
-                //System.out.println("---------- Card " + x + " ----------");
-                //printCard(transformedCard);
-                //System.out.println("");
                 x = x + 1;
             }
 
@@ -175,8 +226,10 @@ public class STGame {
                 STCard cardSelected = (STCard) hand.get(cardSelection);
                 if (cardSelected.getCard_type().equals("play")) {
                     compareCategory(cardSelected, true);
-                    System.out.println("---------- Card last Played ----------");
+                    System.out.println("------Player "+player.getID()+ " played "+ cardSelected.getTitle()+" ------");
                     printCard(playedCard);
+                    System.out.println("--------------------------");
+
                 } else {
                     STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
                     resetAllPlayerSkip();
@@ -185,16 +238,19 @@ public class STGame {
                     } else {
                         resetPlayedCard(selectedTrumpCard.getSubtitle());
                     }
-                    System.out.println("---------- Card last Played ----------");
+                    System.out.println("------Player "+player.getID()+ " played "+ cardSelected.getTitle()+" ------");
                     printCard(selectedTrumpCard);
+                    System.out.println("--------------------------");
                 }
                 hand.remove(cardSelection);
             } else {
-                System.out.println("Player "+ selectedPlayer.getID() + "has no valid cards to play, and will be skipped until a trump card is played");
+                System.out.println("Player "+ selectedPlayer.getID() + " has no valid cards to play, and will be skipped until a trump card is played");
                 selectedPlayer.setPlayerSkip(true);
-                if(checkAllPlayersSkip()){
+                dealSingleCardToPlayer(hand);
+                if(checkResetPlayersSkip()){
                     resetPlayedCard(getRandomCategory());
                     resetAllPlayerSkip();
+
                 }
             }
             if(hand.size()==0){
@@ -206,23 +262,27 @@ public class STGame {
     }
 
 
-    private boolean checkAllPlayersSkip() {
-        boolean  answer = true;
+    private boolean checkResetPlayersSkip() {
+        boolean  answer = false;
+        int noSkipCounter = 0;
         for (STPlayer player : players) {
-            if (player.getPlayerSkip()==false){
-                answer = false;
+            if (player.getPlayerSkip()==true){
+                noSkipCounter= noSkipCounter + 1;
             }
+        }
+        if(noSkipCounter >= players.length - 1)
+        {
+            answer = true;
         }
         return answer;
     }
 
     private void playSuperTrumpCard(){
-        System.out.println("You have played a trump card!\n" +
+        System.out.println("You played 'The Geologist' card!\n" +
                 "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
                 "4. Crustal abundance\n5. Economic Value");
         Scanner in = new Scanner(System.in);
         int userChoice = in.nextInt();
-        System.out.println(userChoice);
         while (userChoice > 5 || userChoice < 1) {
             System.out.println("Invalid Choice");
             userChoice = in.nextInt();
@@ -352,10 +412,10 @@ public class STGame {
 
             case "specific gravity":
                 try{
-                    tempString = playCard.getHardness().split("-")[1];
+                    tempString = playCard.getSpecific_gravity().split("-")[1];
                     //System.out.println(tempString);
                     }
-                catch (Exception e){tempString = playCard.getHardness();
+                catch (Exception e){tempString = playCard.getSpecific_gravity();
                     //System.out.println(tempString);
                 }
                 double specificValue = Double.parseDouble(tempString);
