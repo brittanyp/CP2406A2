@@ -15,6 +15,7 @@ public class STGame {
     private int dealerId;
     private STPlayer[] players;
     private STDeck deck;
+    boolean gameIsOn = true;
     int humanplayerID;
     private String PlayingCategory;
     String PlayingCategoryValue;
@@ -45,84 +46,165 @@ public class STGame {
     }
 
     public void playGame() {
-        int cardSelection;
-        boolean gameIsOn = true;
-        boolean cardValid = false;
-
 
         resetPlayedCard(getRandomCategory());
 
-
         while (gameIsOn) {
-            //todo: setup players in correct order
-            //Todo: define when to reset player skip
+            boolean playerWin = false;
             for (int i = 0; i < players.length; i++) {
-
-                STPlayer selectedPlayer = players[i];
-                if (selectedPlayer.getPlayerSkip()==false) {
-
-                    System.out.println("Category is : " + PlayingCategory + "\nValue to beat is " + PlayingCategoryValue);
-                    //todo check if humanplayer
-                    //if (selectedPlayer.getID() == humanplayerID) {
-                    ArrayList<Integer> validCards = new ArrayList<Integer>();
-                    ArrayList<Object> hand = (ArrayList<Object>) selectedPlayer.getHand();
-                    int x = 0;
-
-                    for (Object card : hand) {
-                        STCard transformedCard = (STCard) card;
-                        if (transformedCard.getCard_type().equals("play")) {
-                            cardValid = compareCategory(transformedCard, false);
-                        } else {
-                            cardValid = true;
-                        }
-                        if (cardValid) {
-                            validCards.add(x);
-                        }
-                        System.out.println("---------- Card " + x + " ----------");
-                        printCard(transformedCard);
-                        System.out.println("");
-                        x = x + 1;
-                    }
-
-                    if (validCards.size() > 0) {
-                        cardSelection = getHumanCardSelection();
-                        while (validCards.contains(cardSelection) == false) {
-                            System.out.println("Invalid card entry");
-                            cardSelection = getHumanCardSelection();
-                        }
-                        STCard cardSelected = (STCard) hand.get(cardSelection);
-                        if (cardSelected.getCard_type().equals("play")) {
-                            compareCategory(cardSelected, true);
-                            System.out.println("---------- Card last Played ----------");
-                            printCard(playedCard);
-                        } else {
-                            STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
-                            resetAllPlayerSkip();
-                            if (selectedTrumpCard.getSubtitle().equals("Change to trumps category of your choice")) {
-                                playSuperTrumpCard();
-                            } else {
-                                resetPlayedCard(selectedTrumpCard.getSubtitle());
-                            }
-                            System.out.println("---------- Card last Played ----------");
-                            printCard(selectedTrumpCard);
-                        }
-                        hand.remove(cardSelection);
-                    } else {
-                        System.out.println("You have no valid cards to play, you will be skipped until a trump card is played");
-                        selectedPlayer.setPlayerSkip(true);
-                        if(checkAllPlayersSkip()){
-                            resetPlayedCard(getRandomCategory());
-                            resetAllPlayerSkip();
-                        }
-                    }
-                    if(hand.size()==0){
-                        System.out.println("Congrats " + selectedPlayer.getID() + " You have won!");
-                        gameIsOn = false;
-                    }
+                STPlayer player = players[i];
+                if(player.getID() ==  humanplayerID){
+                    playerWin = playHumanTurn(player);}
+                else{
+                    playerWin = playBotTurn(player);}
+                if(playerWin){
+                    gameIsOn=false;
+                    break;
                 }
             }
         }
     }
+
+    private boolean playHumanTurn(STPlayer player){
+        int cardSelection;
+        boolean win = false;
+        boolean cardValid = false;
+
+        STPlayer selectedPlayer = player;
+        if (selectedPlayer.getPlayerSkip()==false) {
+
+            System.out.println("Category is : " + PlayingCategory + "\nValue to beat is " + PlayingCategoryValue);
+            //todo check if humanplayer
+            //if (selectedPlayer.getID() == humanplayerID) {
+            ArrayList<Integer> validCards = new ArrayList<Integer>();
+            ArrayList<Object> hand = (ArrayList<Object>) selectedPlayer.getHand();
+            int x = 0;
+
+            for (Object card : hand) {
+                STCard transformedCard = (STCard) card;
+                if (transformedCard.getCard_type().equals("play")) {
+                    cardValid = compareCategory(transformedCard, false);
+                } else {
+                    cardValid = true;
+                }
+                if (cardValid) {
+                    validCards.add(x);
+                }
+                System.out.println("---------- Card " + x + " ----------");
+                printCard(transformedCard);
+                System.out.println("");
+                x = x + 1;
+            }
+
+            if (validCards.size() > 0) {
+                cardSelection = getHumanCardSelection();
+                while (validCards.contains(cardSelection) == false) {
+                    System.out.println("Invalid card entry");
+                    cardSelection = getHumanCardSelection();
+                }
+                STCard cardSelected = (STCard) hand.get(cardSelection);
+                if (cardSelected.getCard_type().equals("play")) {
+                    compareCategory(cardSelected, true);
+                    System.out.println("---------- Card last Played ----------");
+                    printCard(playedCard);
+                } else {
+                    STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
+                    resetAllPlayerSkip();
+                    if (selectedTrumpCard.getSubtitle().equals("Change to trumps category of your choice")) {
+                        playSuperTrumpCard();
+                    } else {
+                        resetPlayedCard(selectedTrumpCard.getSubtitle());
+                    }
+                    System.out.println("---------- Card last Played ----------");
+                    printCard(selectedTrumpCard);
+                }
+                hand.remove(cardSelection);
+            } else {
+                System.out.println("You have no valid cards to play, you will be skipped until a trump card is played");
+                selectedPlayer.setPlayerSkip(true);
+                if(checkAllPlayersSkip()){
+                    resetPlayedCard(getRandomCategory());
+                    resetAllPlayerSkip();
+                }
+            }
+            if(hand.size()==0){
+                System.out.println("Congrats " + selectedPlayer.getID() + " You have won!");
+                win = true;
+                }
+        }
+        return win;
+    }
+
+    private boolean playBotTurn(STPlayer player){
+        int cardSelection;
+        boolean win = false;
+        boolean cardValid = false;
+
+        STPlayer selectedPlayer = player;
+        if (selectedPlayer.getPlayerSkip()==false) {
+
+            System.out.println("Category is : " + PlayingCategory + "\nValue to beat is " + PlayingCategoryValue);
+            //todo check if humanplayer
+            //if (selectedPlayer.getID() == humanplayerID) {
+            ArrayList<Integer> validCards = new ArrayList<Integer>();
+            ArrayList<Object> hand = (ArrayList<Object>) selectedPlayer.getHand();
+            int x = 0;
+
+            for (Object card : hand) {
+                STCard transformedCard = (STCard) card;
+                if (transformedCard.getCard_type().equals("play")) {
+                    cardValid = compareCategory(transformedCard, false);
+                } else {
+                    cardValid = true;
+                }
+                if (cardValid) {
+                    validCards.add(x);
+                }
+                //System.out.println("---------- Card " + x + " ----------");
+                //printCard(transformedCard);
+                //System.out.println("");
+                x = x + 1;
+            }
+
+            if (validCards.size() > 0) {
+                cardSelection = getBotCardSelection(hand.size());
+                while (validCards.contains(cardSelection) == false) {
+                    System.out.println("Invalid card entry");
+                    cardSelection = getBotCardSelection(hand.size());
+                }
+                STCard cardSelected = (STCard) hand.get(cardSelection);
+                if (cardSelected.getCard_type().equals("play")) {
+                    compareCategory(cardSelected, true);
+                    System.out.println("---------- Card last Played ----------");
+                    printCard(playedCard);
+                } else {
+                    STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
+                    resetAllPlayerSkip();
+                    if (selectedTrumpCard.getSubtitle().equals("Change to trumps category of your choice")) {
+                        playSuperTrumpCard();
+                    } else {
+                        resetPlayedCard(selectedTrumpCard.getSubtitle());
+                    }
+                    System.out.println("---------- Card last Played ----------");
+                    printCard(selectedTrumpCard);
+                }
+                hand.remove(cardSelection);
+            } else {
+                System.out.println("Player "+ selectedPlayer.getID() + "has no valid cards to play, and will be skipped until a trump card is played");
+                selectedPlayer.setPlayerSkip(true);
+                if(checkAllPlayersSkip()){
+                    resetPlayedCard(getRandomCategory());
+                    resetAllPlayerSkip();
+                }
+            }
+            if(hand.size()==0){
+                System.out.println("Player " + selectedPlayer.getID() + "has won! Accept defeat with grace.");
+                win = true;
+            }
+        }
+        return win;
+    }
+
 
     private boolean checkAllPlayersSkip() {
         boolean  answer = true;
@@ -485,8 +567,6 @@ public class STGame {
         return valid;
     }
 
-
-
     public void selectPlayerPostion() {
         //Todo: randomly select
         humanplayerID = 0;
@@ -515,5 +595,10 @@ public class STGame {
         Scanner in = new Scanner(System.in);
         int humanCardSelection = in.nextInt();
         return humanCardSelection;
+    }
+
+    public int getBotCardSelection(int handSize) {
+        int randomInt = new Random().nextInt(handSize);
+        return randomInt;
     }
 }
