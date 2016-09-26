@@ -35,6 +35,6 @@ public class STPlayer {
     }
 
     public String toString(){
-        return "PlayerID: " + playerID + "\n Cards: " + hand;
+        return playerID + "\n Cards in Hand: " + hand.size();
     }
 }

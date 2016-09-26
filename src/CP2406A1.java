@@ -1,4 +1,8 @@
+import com.sun.deploy.util.ArrayUtil;
+
+import java.lang.reflect.Array;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 /**
  * Created by Brit on 9/11/2016.
@@ -12,12 +16,11 @@ public class CP2406A1 {
     private static final int QUIT = 3;
 
     public static void main(String[] args) {
-        showGreeting();
-        showMenu();
-        int menuChoice = getUserChoiceMenu();
         boolean programIsOn = true;
-
+        showGreeting();
         while (programIsOn) {
+            showMenu();
+            int menuChoice = getUserChoiceMenu();
 
             switch (menuChoice) {
                 case 1:
@@ -30,6 +33,7 @@ public class CP2406A1 {
                     }
                     game = beginNewGame(deck);
                     game.playGame();
+                    break;
 
                 case 2:
                     System.out.println("Mineral Supertrumps is a game designed to help players learn about " +
@@ -39,8 +43,10 @@ public class CP2406A1 {
                             "Hardness, Specific Gravity, Cleavage, Crustal Abundance, Economic Value. Each round " +
                             "each player plays a card to beat the last value for the selected category" +
                             "Super Trump Cards are special cards that change the selected category.");
+                    break;
                 case 3:
                     programIsOn = false;
+                    break;
             }
         }
     }
@@ -58,29 +64,33 @@ public class CP2406A1 {
     }
 
     private static void showPlayer(STPlayer humanPlayer) {
-        System.out.println("Your ID is: " + humanPlayer);
+        System.out.println("Your position is: " + humanPlayer);
     }
 
     private static int getUserChoiceMenu() {
         Scanner in = new Scanner(System.in);
-        int choice = in.nextInt(3);
-        while (choice > 3 && choice < 1){
-            choice = in.nextInt(3);
+        int choice = in.nextInt();
+
+        while (choice != 1 && choice !=2 && choice !=3) {
+            System.out.println("Please enter a valid number>>>>>");
+            choice = in.nextInt();
         }
         return choice;
-    }
+        }
     private static int getNumOfPlayers() {
+        System.out.print("Please enter the number of players. Remember this game is made for 3-5 Players.\n>>>>>");
         Scanner in = new Scanner(System.in);
-        int num = in.nextInt(2);
-        while (num > 3 && num < 6){
-            num = in.nextInt(2);
+        int num = in.nextInt();
+        while (num < 3 || num > 5){
+            System.out.print("Please enter the number of players. Remember this game is made for 3-5 Players.\n>>>>>");
+            num = in.nextInt();
         }
         return num;
     }
 
     private static void showMenu(){
-        System.out.println("1. Start Game\n2. Info\n3.Exit");
-        int choice = getUserChoiceMenu();
+        System.out.println("1. Play Game\n2. Info\n3. Exit");
+        System.out.print(">>>>>");
     }
 
     private static void showGreeting(){
