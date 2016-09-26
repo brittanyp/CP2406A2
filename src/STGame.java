@@ -1,10 +1,13 @@
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
 /**
  * Created by Brit on 9/11/2016.
  */
+//Todo: create comments, pretty it up
+//Class dedicated to Super Trump Game, constructed by number of players and deck
+
+
 public class STGame {
     int WAITTIME = 4000;
     private static final int NUM_OF_CARDS_TO_DEAL = 2;

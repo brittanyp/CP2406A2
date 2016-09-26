@@ -3,6 +3,8 @@ import java.util.ArrayList;
 /**
  * Created by Brit on 9/15/2016.
  */
+//Todo: create comments, pretty it up
+
 public class STPlayCard extends STCard {
     public String specific_gravity, hardness, chemistry, classification,crystal_system, cleavage, crustal_abundance, economic_value;
     public ArrayList<String> occurrence;

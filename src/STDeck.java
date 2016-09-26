@@ -1,38 +1,33 @@
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
+//Todo: See if playTCard and playPCard are needed
+
+//Class for Super Trump game deck
 
 public class STDeck {
-    private static final int INIT_NUM_CARDS = 60;
+    //Define cards in deck
     private ArrayList<Object> deck;
 
     public STDeck(){
+        //Create ArrayList deck
        deck = new ArrayList<Object>();
-        //for (int i = 0; i < INIT_NUM_CARDS; i++) {
-             //cards.add(new STCard(i));
-
-            //google how to create random array of integers (no repeats)
-
-        //}
     }
    public ArrayList<Object> dealCards(int nCards) {
+       //Deals nCards to a hand
+       //Returns arrayList hand
+       //Passed nCards; number of cards
         ArrayList<Object> hand = new ArrayList<Object>();
         for (int i = 0; i < nCards; i++){
+            //Generate a random int
             int index = new Random().nextInt((deck.size()));
             STCard selectedCard = (STCard) deck.get(index);
             if (selectedCard.getCard_type().equals("play")) {
                 STPlayCard card = (STPlayCard) deck.remove(index);
-                //deck.remove(index);
                 hand.add(card);
-                //Todo: remove line below
-                //card.toPrntString();
             }
             if (selectedCard.getCard_type().equals("trump")) {
                 STTrumpCard card = (STTrumpCard) deck.remove(index);
-                //deck.remove(index);
                 hand.add(card);
-                //Todo: remove line below
-                //card.toPrntString();
             }
         }
         return hand;
@@ -46,17 +41,8 @@ public class STDeck {
         deck.add(index, card);
     }
 
-    public STPlayCard getPCard(int index){
-        STPlayCard card = (STPlayCard) deck.get(index);
-        return card;
-    }
-
-    public STTrumpCard getTCard(int index){
-        STTrumpCard card = (STTrumpCard) deck.get(index);
-        return card;
-    }
-
     public STCard getRandomSingleCard() {
+        //
         int randomInt = new Random().nextInt((deck.size()));
         STCard card = (STCard) deck.get(randomInt);
         deck.remove(randomInt);

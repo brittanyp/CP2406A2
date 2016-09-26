@@ -1,6 +1,8 @@
 /**
  * Created by Brit on 9/15/2016.
  */
+//Todo: create comments, pretty it up
+
 public class STTrumpCard extends STCard {
     public String subtitle;
     public STTrumpCard(int id, String fileName, String imageName, String card_type, String title, String subtitle) {

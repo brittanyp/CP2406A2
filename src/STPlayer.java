@@ -4,6 +4,9 @@ import java.util.ArrayList;
 /**
  * Created by Brit on 9/11/2016.
  */
+
+//Todo: create comments, pretty it up
+
 public class STPlayer {
     private ArrayList<Object> hand;
     private int playerID;
