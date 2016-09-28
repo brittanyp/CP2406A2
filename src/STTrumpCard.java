@@ -1,7 +1,7 @@
 /**
  * Created by Brit on 9/15/2016.
  */
-//Todo: create comments, pretty it up
+//Class Super Trump Trump Card extends on STCard
 
 public class STTrumpCard extends STCard {
     public String subtitle;
@@ -15,10 +15,9 @@ public class STTrumpCard extends STCard {
     }
 
     public void toPrntString(){
+        //Prints information the card stores
         System.out.println("Title - " + title);
         System.out.println("Card Type - " + card_type);
         System.out.println("Subtitle - " + subtitle);
     }
-
-
 }

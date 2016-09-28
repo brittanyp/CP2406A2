@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Random;
-//Todo: See if playTCard and playPCard are needed
-
 //Class for Super Trump game deck
 
 public class STDeck {
@@ -42,10 +40,14 @@ public class STDeck {
     }
 
     public STCard getRandomSingleCard() {
-        //
-        int randomInt = new Random().nextInt((deck.size()));
-        STCard card = (STCard) deck.get(randomInt);
-        deck.remove(randomInt);
-        return card;
+        //Generates a random integer to get a random card
+        // from the deck, returns the card after removing the card from the deck
+            int randomInt = new Random().nextInt((deck.size()));
+            STCard card = (STCard) deck.get(randomInt);
+            deck.remove(randomInt);
+            return card;
+    }
+    public int getDeckSize(){
+        return deck.size();
     }
 }

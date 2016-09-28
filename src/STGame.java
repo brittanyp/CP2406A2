@@ -4,13 +4,11 @@ import java.util.Scanner;
 /**
  * Created by Brit on 9/11/2016.
  */
-//Todo: create comments, pretty it up
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
-
 public class STGame {
-    int WAITTIME = 4000;
-    private static final int NUM_OF_CARDS_TO_DEAL = 2;
+    int WAITTIME = 3000;
+    private static final int NUM_OF_CARDS_TO_DEAL = 8;
     private int numOfPlayers;
     private STPlayer[] players;
     private STDeck deck;
@@ -27,10 +25,10 @@ public class STGame {
     }
 
     public void dealRandomCardsToEachPlayer() {
+        //Create players and deal random cards to each player
         players = new STPlayer[numOfPlayers];
-        for (int i = 0; i < numOfPlayers; i++){
+        for (int i = 0; i < numOfPlayers; i++) {
             players[i] = new STPlayer(i);
-
         }
         for (STPlayer player : players) {
             ArrayList<Object> hand = deck.dealCards(NUM_OF_CARDS_TO_DEAL);
@@ -38,86 +36,104 @@ public class STGame {
         }
     }
 
-    public void dealSingleCardToPlayer(ArrayList<Object> hand){
-        STCard card=deck.getRandomSingleCard();
-        hand.add(card);
+    public void dealSingleCardToPlayer(ArrayList<Object> hand) {
+        //Deals single cards to hand
+        //Passed instance of hand
+        if (deck.getDeckSize() != 0) {
+            STCard card = deck.getRandomSingleCard();
+            hand.add(card);
+        }
+
     }
 
-    public void playGame(){
-        String category="";
-
-        if(players[0].getID()==humanplayerID) {
-            ArrayList<Object> hand = (ArrayList<Object>) players[0].getHand();
-            int x = 0;
-            for (Object card : hand) {
-                STCard transformedCard = (STCard) card;
-                System.out.println("---------- Card " + x + " ----------");
-                printCard(transformedCard);
-                System.out.println("");
-                x = x + 1;
+    public void playGame() {
+        //Iterates through rounds until game winning conditions are met
+        String category = "";
+        boolean exit = false;
+        //Inital start
+        if (players[0].getID() == humanplayerID) {
+            //Human
+            exit = askIfExit();
+            if (exit == false) {
+                ArrayList<Object> hand = (ArrayList<Object>) players[0].getHand();
+                int x = 0;
+                for (Object card : hand) {
+                    //Print hand
+                    STCard transformedCard = (STCard) card;
+                    System.out.println("---------- Card " + x + " ----------");
+                    printCard(transformedCard);
+                    System.out.println("");
+                    x = x + 1;
+                }
+                System.out.println("You are the first player\n" +
+                        "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
+                        "4. Crustal abundance\n5. Economic Value");
+                Scanner in = new Scanner(System.in);
+                int userChoice = in.nextInt();
+                while (userChoice > 5 || userChoice < 1) {
+                    System.out.println("Invalid Choice");
+                    userChoice = in.nextInt();
+                }
+                switch (userChoice) {
+                    case 1:
+                        category = "hardness";
+                        break;
+                    case 2:
+                        category = "specific gravity";
+                        break;
+                    case 3:
+                        category = "cleavage";
+                        break;
+                    case 4:
+                        category = "crustal abundance";
+                        break;
+                    case 5:
+                        category = "economic value";
+                        break;
+                }
+                System.out.println("-----------------------------");
+            } else {
+                gameIsOn = false;
             }
-            System.out.println("You are the first player\n" +
-                    "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
-                    "4. Crustal abundance\n5. Economic Value");
-            Scanner in = new Scanner(System.in);
-            int userChoice = in.nextInt();
-            while (userChoice > 5 || userChoice < 1) {
-                System.out.println("Invalid Choice");
-                userChoice = in.nextInt();
-            }
-            switch (userChoice) {
-                case 1:
-                    category = "hardness";
-                    break;
-                case 2:
-                    category = "specific gravity";
-                    break;
-                case 3:
-                    category = "cleavage";
-                    break;
-                case 4:
-                    category = "crustal abundance";
-                    break;
-                case 5:
-                    category = "economic value";
-                    break;
-            }
-            System.out.println("-----------------------------");
-        }
-        else{
+        } else {
+            //Bot
             category = getRandomCategory();
-            try{
+            try {
                 //Delays process for WAITTIME ms
-                Thread.sleep(WAITTIME);}
-            catch(InterruptedException ex){
-                Thread.currentThread().interrupt();}
+                Thread.sleep(WAITTIME);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
+            }
         }
         resetPlayedCard(category);
 
         while (gameIsOn) {
+            //Iterates through rounds
             boolean playerWin = false;
             for (int i = 0; i < players.length; i++) {
                 STPlayer player = players[i];
-                if(player.getID() ==  humanplayerID){
-                    playerWin = playHumanTurn(player);}
-                else{
+                if (player.getID() == humanplayerID) {
+                    playerWin = playHumanTurn(player);
+                } else {
                     playerWin = playBotTurn(player);
-
                 }
-                if(playerWin){
-                    gameIsOn=false;
+                if (playerWin) {
+                    gameIsOn = false;
                     break;
                 }
-                try{
+                try {
                     //Delays process for WAITTIME ms
-                    Thread.sleep(WAITTIME);}
-                catch(InterruptedException ex){
-                    Thread.currentThread().interrupt();}
+                    Thread.sleep(WAITTIME);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
 
-    private boolean playHumanTurn(STPlayer player){
+    private boolean playHumanTurn(STPlayer player) {
+        //Play turn for the human player
+        //Returns win boolean
         int cardSelection;
         boolean magnetiteInHand = false;
         boolean geophysicistInHand = false;
@@ -125,9 +141,7 @@ public class STGame {
         boolean cardValid = false;
 
         STPlayer selectedPlayer = player;
-        if (selectedPlayer.getPlayerSkip()==false) {
-
-            System.out.println("~ Category is : " + PlayingCategory + " ~\n~ Value to beat is " + PlayingCategoryValue + " ~");
+        if (selectedPlayer.getPlayerSkip() == false) {
             ArrayList<Integer> validCards = new ArrayList<Integer>();
             ArrayList<Object> hand = (ArrayList<Object>) selectedPlayer.getHand();
             int x = 0;
@@ -135,11 +149,11 @@ public class STGame {
             for (Object card : hand) {
                 STCard transformedCard = (STCard) card;
                 //Check if card is magnetite
-                if(transformedCard.getTitle().equals("Magnetite")){
+                if (transformedCard.getTitle().equals("Magnetite")) {
                     magnetiteInHand = true;
                 }
                 //Check if card is geophysicist
-                if (transformedCard.getTitle().equals("The Geophysicist")){
+                if (transformedCard.getTitle().equals("The Geophysicist")) {
                     geophysicistInHand = true;
                 }
 
@@ -156,12 +170,12 @@ public class STGame {
                 System.out.println("");
                 x = x + 1;
             }
-            if(magnetiteInHand==true && geophysicistInHand==true){
+            printCurrentCategoryNValue();
+            if (magnetiteInHand == true && geophysicistInHand == true) {
+                //Winning condition
                 System.out.println("You hold both the magnetite and geophysicist cards!");
-                win=true;
-            }
-            else {
-
+                win = true;
+            } else {
                 if (validCards.size() > 0) {
                     cardSelection = getHumanCardSelection();
                     while (validCards.contains(cardSelection) == false) {
@@ -178,7 +192,7 @@ public class STGame {
                         STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
                         resetAllPlayerSkip();
                         if (selectedTrumpCard.getSubtitle().equals("Change to trumps category of your choice")) {
-                            playGeologistCard();
+                            playGeologistCard(selectedPlayer);
                         } else {
                             resetPlayedCard(selectedTrumpCard.getSubtitle());
                         }
@@ -206,7 +220,9 @@ public class STGame {
         return win;
     }
 
-    private boolean playBotTurn(STPlayer player){
+    private boolean playBotTurn(STPlayer player) {
+        //Play bots turn
+        //returns win boolean
         int cardSelection;
         boolean magnetiteInHand = false;
         boolean geophysicistInHand = false;
@@ -214,7 +230,7 @@ public class STGame {
         boolean cardValid = false;
 
         STPlayer selectedPlayer = player;
-        if (selectedPlayer.getPlayerSkip()==false) {
+        if (selectedPlayer.getPlayerSkip() == false) {
 
             ArrayList<Integer> validCards = new ArrayList<Integer>();
             ArrayList<Object> hand = (ArrayList<Object>) selectedPlayer.getHand();
@@ -222,11 +238,12 @@ public class STGame {
 
             for (Object card : hand) {
                 STCard transformedCard = (STCard) card;
-                if(transformedCard.getTitle().equals("Magnetite")){
+                //Check if card is Magnetite
+                if (transformedCard.getTitle().equals("Magnetite")) {
                     magnetiteInHand = true;
                 }
                 //Check if card is geophysicist
-                if (transformedCard.getTitle().equals("The Geophysicist")){
+                if (transformedCard.getTitle().equals("The Geophysicist")) {
                     geophysicistInHand = true;
                 }
                 if (transformedCard.getCard_type().equals("play")) {
@@ -235,16 +252,16 @@ public class STGame {
                     cardValid = true;
                 }
                 if (cardValid) {
+                    //Add card to validCard array if it is deemed valid
                     validCards.add(x);
                 }
                 x = x + 1;
             }
-            if(magnetiteInHand==true && geophysicistInHand==true){
-                System.out.println("Player "+ selectedPlayer.getID()+" holds both the magnetite and geophysicist cards!");
+            if (magnetiteInHand == true && geophysicistInHand == true) {
+                System.out.println("Player " + selectedPlayer.getID() + " holds both the magnetite and geophysicist cards!");
                 System.out.println("Player " + selectedPlayer.getID() + " has won! Accept defeat with grace.");
-                win=true;
-            }
-            else {
+                win = true;
+            } else {
                 if (validCards.size() > 0) {
                     cardSelection = getBotCardSelection(hand.size());
                     while (validCards.contains(cardSelection) == false) {
@@ -261,7 +278,7 @@ public class STGame {
                         STTrumpCard selectedTrumpCard = (STTrumpCard) cardSelected;
                         resetAllPlayerSkip();
                         if (selectedTrumpCard.getSubtitle().equals("Change to trumps category of your choice")) {
-                            playGeologistCard();
+                            playGeologistCard(selectedPlayer);
                         } else {
                             resetPlayedCard(selectedTrumpCard.getSubtitle());
                         }
@@ -289,54 +306,66 @@ public class STGame {
         return win;
     }
 
+    private void printCurrentCategoryNValue() {
+        System.out.println("Category: " + PlayingCategory + "\nValue: " + PlayingCategoryValue);
+    }
 
     private boolean checkResetPlayersSkip() {
-        boolean  answer = false;
+        //Method that iterates through players to check the players skip value
+        //Returns boolean answer which stores if there is only one person without skip value true
+        boolean answer = false;
         int noSkipCounter = 0;
         for (STPlayer player : players) {
-            if (player.getPlayerSkip()==true){
-                noSkipCounter= noSkipCounter + 1;
+            if (player.getPlayerSkip() == true) {
+                noSkipCounter = noSkipCounter + 1;
             }
         }
-        if(noSkipCounter >= players.length - 1)
-        {
+        if (noSkipCounter >= players.length - 1) {
             answer = true;
         }
         return answer;
     }
 
-    private void playGeologistCard(){
-        System.out.println("You played 'The Geologist' card!\n" +
-                "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
-                "4. Crustal abundance\n5. Economic Value");
-        Scanner in = new Scanner(System.in);
-        int userChoice = in.nextInt();
-        while (userChoice > 5 || userChoice < 1) {
-            System.out.println("Invalid Choice");
-            userChoice = in.nextInt();
-        }
+    private void playGeologistCard(STPlayer player) {
         String category = "";
-        switch (userChoice) {
-            case 1:
-                category = "hardness";
-                break;
-            case 2:
-                category = "specific gravity";
-                break;
-            case 3:
-                category = "cleavage";
-                break;
-            case 4:
-                category = "crustal abundance";
-                break;
-            case 5:
-                category = "economic value";
-                break;
+        //Function called for special card which lets user choose category
+        if (player.getID() == humanplayerID) {
+            //If its a humans turn
+            System.out.println("You played 'The Geologist' card!\n" +
+                    "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
+                    "4. Crustal abundance\n5. Economic Value");
+            int userChoice = getUserInputInt();
+            while (userChoice > 5 || userChoice < 1) {
+                System.out.println("Invalid Choice");
+                userChoice = getUserInputInt();
+            }
+
+            switch (userChoice) {
+                case 1:
+                    category = "hardness";
+                    break;
+                case 2:
+                    category = "specific gravity";
+                    break;
+                case 3:
+                    category = "cleavage";
+                    break;
+                case 4:
+                    category = "crustal abundance";
+                    break;
+                case 5:
+                    category = "economic value";
+                    break;
+            }
+        } else {
+            //If its a bots turn
+            category = getRandomCategory();
         }
         resetPlayedCard(category);
     }
 
     private void resetAllPlayerSkip() {
+        //Iterates through players and sets each players skip value to false
         for (STPlayer player : players) {
             player.setPlayerSkip(false);
         }
@@ -344,9 +373,11 @@ public class STGame {
     }
 
     private String getRandomCategory() {
+        //Uses a random integer as a switch value and selects a category based on the random number
+        //Returns the selected category as a string
         String selectedCategory = "";
         int randomInt = new Random().nextInt(5);
-        switch(randomInt){
+        switch (randomInt) {
             case 0:
                 selectedCategory = "hardness";
                 break;
@@ -366,9 +397,10 @@ public class STGame {
         return selectedCategory;
     }
 
-    private void resetPlayedCard(String category){
-
-        category=category.toLowerCase();
+    private void resetPlayedCard(String category) {
+        //Resets the variables playedCard and playingCategory to a origin card that holds the smallest playering
+        // values for each category
+        category = category.toLowerCase();
         ArrayList<String> originArray = new ArrayList<String>();
         STPlayCard originCard = new STPlayCard(101, "OriginCard", "NA", "play",
                 "OriginCard", "NA", "NA", "NA", originArray, "0", "0", "none",
@@ -376,15 +408,15 @@ public class STGame {
 
         playedCard = originCard;
         PlayingCategory = category;
-        switch(category){
+        switch (category) {
             case "hardness":
                 PlayingCategoryValue = originCard.getHardness();
                 break;
             case "specific gravity":
-                PlayingCategoryValue =originCard.getSpecific_gravity();
+                PlayingCategoryValue = originCard.getSpecific_gravity();
                 break;
             case "cleavage":
-                PlayingCategoryValue =originCard.getCleavage();
+                PlayingCategoryValue = originCard.getCleavage();
                 break;
             case "crustal abundance":
                 PlayingCategoryValue = originCard.getCrustal_abundance();
@@ -396,19 +428,23 @@ public class STGame {
     }
 
     private boolean askIfExit() {
+        //Method that asks user if they wish to end the game
+        //Returns boolean true or false depending on if user writes YES
         System.out.println("---------- Quit? ----------");
         System.out.println("Wanna Quit? Type 'Yes' if so\nType 'No' if you wish to continue");
         Scanner in = new Scanner(System.in);
-        String answer=in.nextLine().trim().toUpperCase();
-        if (answer.equals("YES")){
+        String answer = in.nextLine().trim().toLowerCase();
+        if (answer.equals("yes")) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
     private boolean compareCategory(Object object, boolean setValue) {
+        //Function that compares a card with the current playing category and playing category value
+        //Passed Card and setValue which determines if the playingcategory and playingcategoryvalue are
+        //updated
         int Level = 0;
         int currentLevel = 0;
         String tempString;
@@ -416,13 +452,12 @@ public class STGame {
         boolean valid = false;
         STPlayCard playCard = (STPlayCard) object;
         STPlayCard playedCardTransformed = (STPlayCard) playedCard;
-        switch(PlayingCategory){
+        switch (PlayingCategory) {
             case "hardness":
-                try{
-                tempString = playCard.getHardness().split("-")[1];
+                try {
+                    tempString = playCard.getHardness().split("-")[1];
 
-                    }
-                catch (Exception e) {
+                } catch (Exception e) {
                     try {
                         tempString = playCard.getHardness().split(" ")[1];
                     } catch (Exception etwo) {
@@ -432,23 +467,23 @@ public class STGame {
                 }
                 double hardnessValue = Double.parseDouble(tempString);
                 double currentHardnessValue = Double.parseDouble(PlayingCategoryValue);
-                if (hardnessValue > currentHardnessValue){
+                if (hardnessValue > currentHardnessValue) {
                     valid = true;
                     newValue = Double.toString(hardnessValue);
                 }
                 break;
 
             case "specific gravity":
-                try{
+                try {
                     tempString = playCard.getSpecific_gravity().split("-")[1];
                     //System.out.println(tempString);
-                    }
-                catch (Exception e){tempString = playCard.getSpecific_gravity();
+                } catch (Exception e) {
+                    tempString = playCard.getSpecific_gravity();
                     //System.out.println(tempString);
                 }
                 double specificValue = Double.parseDouble(tempString);
                 double currentSpecificValue = Double.parseDouble(PlayingCategoryValue);
-                if (specificValue > currentSpecificValue){
+                if (specificValue > currentSpecificValue) {
                     valid = true;
                     newValue = Double.toString(specificValue);
                 }
@@ -494,14 +529,14 @@ public class STGame {
                         currentLevel = 5;
                         break;
                 }
-                if (Level > currentLevel){
+                if (Level > currentLevel) {
                     valid = true;
                     newValue = playCard.getCrustal_abundance();
                 }
                 break;
 
             case "economic value":
-                switch (playCard.getEconomic_value()){
+                switch (playCard.getEconomic_value()) {
                     case "trivial":
                         Level = 0;
                         break;
@@ -519,7 +554,8 @@ public class STGame {
                         break;
                     case "I'm rich!":
                         Level = 5;
-                        break;}
+                        break;
+                }
 
                 switch (playedCardTransformed.getEconomic_value()) {
                     case "trivial":
@@ -541,14 +577,14 @@ public class STGame {
                         currentLevel = 5;
                         break;
                 }
-                if (Level > currentLevel){
+                if (Level > currentLevel) {
                     valid = true;
                     newValue = playCard.getEconomic_value();
                 }
                 break;
 
             case "cleavage":
-                switch (playCard.getCleavage()){
+                switch (playCard.getCleavage()) {
                     case "none":
                         Level = 0;
                         break;
@@ -595,7 +631,7 @@ public class STGame {
                         Level = 14;
                         break;
                 }
-                switch (playedCardTransformed.getCleavage()){
+                switch (playedCardTransformed.getCleavage()) {
                     case "none":
                         currentLevel = 0;
                         break;
@@ -642,13 +678,13 @@ public class STGame {
                         currentLevel = 14;
                         break;
                 }
-                if (Level > currentLevel){
+                if (Level > currentLevel) {
                     valid = true;
                     newValue = playCard.getCleavage();
                 }
                 break;
         }
-        if (setValue){
+        if (setValue) {
             playedCard = playCard;
             PlayingCategoryValue = newValue;
         }
@@ -656,39 +692,57 @@ public class STGame {
     }
 
     public void selectPlayerPostion() {
+        //Assigns human player to random position
         int playerPostion = new Random().nextInt(players.length);
         humanplayerID = playerPostion;
     }
 
-    public void printCard(STCard transformedCard){
-        if (transformedCard.getCard_type().equals("play")){
+    public void printCard(STCard transformedCard) {
+        //Prints card depending on what play type
+        //Passed STCard
+        if (transformedCard.getCard_type().equals("play")) {
             STPlayCard playCard = (STPlayCard) transformedCard;
 
             playCard.toPrntString();
         }
-        if (transformedCard.getCard_type().equals("trump")){
+        if (transformedCard.getCard_type().equals("trump")) {
             STTrumpCard trumpCard = (STTrumpCard) transformedCard;
             trumpCard.toPrntString();
         }
     }
 
     public STPlayer getHumanPlayer() {
+        //Returns human player ID
         return players[humanplayerID];
     }
 
-    public int getHumanCardSelection() {
-        System.out.print("Enter Card you want to put down\n>>>>>");
-        Scanner in = new Scanner(System.in);
-        int humanCardSelection = in.nextInt();
-        return humanCardSelection;
-    }
 
     public int getBotCardSelection(int handSize) {
+        //returns a random integer in the range 0-handsize (exclusive max)
         int randomInt = new Random().nextInt(handSize);
         return randomInt;
     }
 
     public void chooseDealer() {
-       dealerID=1;
+        dealerID = 1;
+    }
+
+    public int getHumanCardSelection() {
+        //Prompts user to enter a integer
+        //Returns integer
+        System.out.print("Enter Card you want to put down\n>>>>>");
+        int humanCardSelection = getUserInputInt();
+        return humanCardSelection;
+    }
+
+    private static int getUserInputInt() {
+        Scanner in = new Scanner(System.in);
+        while (!in.hasNextInt()) {
+            in.next();
+            System.out.print("Enter Valid numbers>>>>>>");
+
+        }
+        String inputChoice = in.next();
+        return Integer.parseInt(inputChoice);
     }
 }

@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-
 /**
  * Created by Brit on 9/15/2016.
  */
-//Todo: create comments, pretty it up
+//Class for Super Trump Play cards that extends on STCard
 
 public class STPlayCard extends STCard {
     public String specific_gravity, hardness, chemistry, classification,crystal_system, cleavage, crustal_abundance, economic_value;
@@ -55,18 +54,14 @@ public class STPlayCard extends STCard {
     public String getCrustal_abundance(){
         return crustal_abundance;
     }
+
     public String getEconomic_value(){
         return economic_value;
     }
 
-//    public String getHardness(){
-//        String str;
-//        str=hardness.split("-")[1];
-//        //double highestHardness;
-//        return str;
-//    }
 
     public void toPrntString(){
+        //Prints out string relevent to class and game
         System.out.println("Title: " + title);
         System.out.println("Card Type: " + card_type);
         System.out.println("Chemistry: " + chemistry);
@@ -78,6 +73,5 @@ public class STPlayCard extends STCard {
         System.out.println("Cleavage: " + cleavage);
         System.out.println("Crustal Abundance: " + crustal_abundance);
         System.out.println("Economic Value: " + economic_value);
-
     }
 }

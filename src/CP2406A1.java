@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
  * Created by Brittany Peever on 9/11/2016.
@@ -18,7 +19,7 @@ public class CP2406A1 {
             int menuChoice = getUserChoiceMenu();
 
             switch (menuChoice) {
-                case 1:
+                case NEW_GAME:
                     //Play game
                     STGame game;
                     STDeck deck = null;
@@ -31,14 +32,15 @@ public class CP2406A1 {
                     game.playGame();
                     break;
 
-                case 2:
+                case INFO:
                     //Display Information about ST Game
                     showInformation();
 
                     break;
-                case 3:
+                case QUIT:
                     //Exit program
                     programIsOn = false;
+                    System.out.println("Thanks for playing and Good luck with your test!");
                     break;
             }
         }
@@ -80,27 +82,38 @@ public class CP2406A1 {
         System.out.println("Your position is: " + humanPlayer);
     }
 
+    private static int getUserInputInt(){
+        Scanner in = new Scanner(System.in);
+        while (!in.hasNextInt()) {
+            in.next();
+            System.out.print("Enter Valid numbers>>>>>>");
+
+        }
+        String inputChoice = in.next();
+        return Integer.parseInt(inputChoice);
+    }
+
     private static int getUserChoiceMenu() {
         //Get user choice for menu
         //Returns integer choice
-        Scanner in = new Scanner(System.in);
-        int choice = in.nextInt();
-
+        int choice = 0;
+        choice = getUserInputInt();
         while (choice != 1 && choice !=2 && choice !=3) {
-            System.out.println("Please enter a valid number>>>>>");
-            choice = in.nextInt();
+            System.out.print("Enter Valid numbers>>>>>>");
+            choice = getUserInputInt();
+
         }
+
         return choice;
         }
     private static int getNumOfPlayers() {
         //Get user input for number of players
         //Return integer num; selected number of players
         System.out.print("Please enter the number of players. Remember this game is made for 3-5 Players.\n>>>>>");
-        Scanner in = new Scanner(System.in);
-        int num = in.nextInt();
+        int num = getUserInputInt();
         while (num < 3 || num > 5){
             System.out.print("Please enter the number of players. Remember this game is made for 3-5 Players.\n>>>>>");
-            num = in.nextInt();
+            num = getUserChoiceMenu();
         }
         return num;
     }
@@ -115,5 +128,4 @@ public class CP2406A1 {
         //Show greeting to user
         System.out.println("Welcome to the Super Trump Game.");
     }
-
 }

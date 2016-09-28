@@ -1,12 +1,8 @@
-
 import java.util.ArrayList;
-
 /**
  * Created by Brit on 9/11/2016.
  */
-
-//Todo: create comments, pretty it up
-
+//Class Super Trump players
 public class STPlayer {
     private ArrayList<Object> hand;
     private int playerID;
@@ -14,7 +10,6 @@ public class STPlayer {
 
     public STPlayer(int playerID) {
         this.playerID = playerID;
-
     }
 
     public void setHand(ArrayList<Object> hand) {
