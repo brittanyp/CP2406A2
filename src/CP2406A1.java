@@ -27,6 +27,9 @@ public class CP2406A1 {
                         deck = ReadFile.ReadTheFile();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        System.out.print("Unable to read file, exiting program.");
+                        programIsOn=false;
+                        break;
                     }
                     game = beginNewGame(deck);
                     game.playGame();
