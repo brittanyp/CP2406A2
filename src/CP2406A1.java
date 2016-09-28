@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
@@ -26,7 +27,6 @@ public class CP2406A1 {
                     try {
                         deck = ReadFile.ReadTheFile();
                     } catch (Exception e) {
-                        e.printStackTrace();
                         System.out.print("Unable to read file, exiting program.");
                         programIsOn=false;
                         break;

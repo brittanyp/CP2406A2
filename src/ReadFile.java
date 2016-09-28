@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class ReadFile {
     public static STDeck ReadTheFile() throws Exception{
         //Path to file
-        String path = "F:\\Uni\\SP_3_IT\\CP2406\\Assignment1\\CP2406A1\\CP2406A1\\MstCards_151021v3.xml";
+        String path = "F:\\Uni\\SP_3_ITCP2406\\Assignment1\\CP2406A1\\CP2406A1\\MstCards_151021v3.xml";
         STDeck deck = new STDeck();
         ArrayList <Object> card = new ArrayList<Object> ();
         ArrayList<String> occurrenceArray = new ArrayList<String>();
