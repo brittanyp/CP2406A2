@@ -54,9 +54,9 @@ public class CP2406A1 {
         System.out.println("Mineral Supertrumps is a game designed to help players learn about " +
                 "the properies and uses of common rockforming minerals.");
         System.out.println("Objective: To be the first player to lose all of your cards");
-        System.out.println("How to play: Each player is dealt 8 cards. Each normal card has 5 categories; " +
-                "Hardness, Specific Gravity, Cleavage, Crustal Abundance, Economic Value. Each round " +
-                "each player plays a card to beat the last value for the selected category" +
+        System.out.println("How to play: Each player is dealt 8 cards. Each normal card has 5 categories; \n" +
+                "Hardness, Specific Gravity, Cleavage, Crustal Abundance, Economic Value. Each round \n" +
+                "each player plays a card to beat the last value for the selected category\n" +
                 "Super Trump Cards are special cards that change the selected category.");
     }
 
@@ -116,7 +116,7 @@ public class CP2406A1 {
         int num = getUserInputInt();
         while (num < 3 || num > 5){
             System.out.print("Please enter the number of players. Remember this game is made for 3-5 Players.\n>>>>>");
-            num = getUserChoiceMenu();
+            num = getUserInputInt();
         }
         return num;
     }
