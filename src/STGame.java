@@ -14,8 +14,8 @@ public class STGame {
     private STDeck deck;
     boolean gameIsOn = true;
     int humanplayerID;
-    private String PlayingCategory;
-    String PlayingCategoryValue;
+    private String playingCategory;
+    String playingCategoryValue;
     STCard playedCard;
     int dealerID;
 
@@ -315,7 +315,7 @@ public class STGame {
     }
 
     private void printCurrentCategoryNValue() {
-        System.out.println("Category: " + PlayingCategory + "\nValue: " + PlayingCategoryValue);
+        System.out.println("Category: " + playingCategory + "\nValue: " + playingCategoryValue);
     }
 
     private boolean checkResetPlayersSkip() {
@@ -415,22 +415,22 @@ public class STGame {
                 "ultratrace", "trivial");
 
         playedCard = originCard;
-        PlayingCategory = category;
+        playingCategory = category;
         switch (category) {
             case "hardness":
-                PlayingCategoryValue = originCard.getHardness();
+                playingCategoryValue = originCard.getHardness();
                 break;
             case "specific gravity":
-                PlayingCategoryValue = originCard.getSpecific_gravity();
+                playingCategoryValue = originCard.getSpecific_gravity();
                 break;
             case "cleavage":
-                PlayingCategoryValue = originCard.getCleavage();
+                playingCategoryValue = originCard.getCleavage();
                 break;
             case "crustal abundance":
-                PlayingCategoryValue = originCard.getCrustal_abundance();
+                playingCategoryValue = originCard.getCrustal_abundance();
                 break;
             case "economic value":
-                PlayingCategoryValue = originCard.getEconomic_value();
+                playingCategoryValue = originCard.getEconomic_value();
                 break;
         }
     }
@@ -460,7 +460,7 @@ public class STGame {
         boolean valid = false;
         STPlayCard playCard = (STPlayCard) object;
         STPlayCard playedCardTransformed = (STPlayCard) playedCard;
-        switch (PlayingCategory) {
+        switch (playingCategory) {
             case "hardness":
                 try {
                     tempString = playCard.getHardness().split("-")[1];
@@ -474,7 +474,7 @@ public class STGame {
                     }
                 }
                 double hardnessValue = Double.parseDouble(tempString);
-                double currentHardnessValue = Double.parseDouble(PlayingCategoryValue);
+                double currentHardnessValue = Double.parseDouble(playingCategoryValue);
                 if (hardnessValue > currentHardnessValue) {
                     valid = true;
                     newValue = Double.toString(hardnessValue);
@@ -490,7 +490,7 @@ public class STGame {
                     //System.out.println(tempString);
                 }
                 double specificValue = Double.parseDouble(tempString);
-                double currentSpecificValue = Double.parseDouble(PlayingCategoryValue);
+                double currentSpecificValue = Double.parseDouble(playingCategoryValue);
                 if (specificValue > currentSpecificValue) {
                     valid = true;
                     newValue = Double.toString(specificValue);
@@ -694,7 +694,7 @@ public class STGame {
         }
         if (setValue) {
             playedCard = playCard;
-            PlayingCategoryValue = newValue;
+            playingCategoryValue = newValue;
         }
         return valid;
     }
