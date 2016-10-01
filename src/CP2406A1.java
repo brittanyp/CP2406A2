@@ -1,5 +1,3 @@
-import java.io.FileNotFoundException;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
  * Created by Brittany Peever on 9/11/2016.

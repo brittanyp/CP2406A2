@@ -1,7 +1,7 @@
 /**
  * Created by Brit on 9/13/2016.
  */
-//Todo: Put cards into deck, return deck
+//Todo: Fix path
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -9,20 +9,28 @@ import org.w3c.dom.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 //Class dedicated to reading xml file
 
 public class ReadFile {
     public static STDeck ReadTheFile() throws Exception{
+        //PC path
+        String path = "F:\\Uni\\SP_3_IT\\CP2406\\Completed assignment 1\\CP2406A1\\MstCards_151021.xml";
+        //USB path
+        //String path = "H:\\IT\\SP_3_IT\\CP2406\\Completed assignment 1\\MstCards_151021.xml";
+        String strPath = getFileString(path);
         //Path to file
-        String path = "F:\\Uni\\SP_3_IT\\CP2406\\Assignment1\\CP2406A1\\CP2406A1\\MstCards_151021.xml";
-        STDeck deck = new STDeck();
+         STDeck deck = new STDeck();
         ArrayList <Object> card = new ArrayList<Object> ();
         ArrayList<String> occurrenceArray = new ArrayList<String>();
 
         //Build document
-        File xmlFile = new File(path);
+        File xmlFile = new File(strPath);
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(xmlFile);
@@ -110,6 +118,14 @@ public class ReadFile {
             card.add(placement, valueElement.getTextContent());
             placement= placement + 1;
         }
+    }
+
+    public static String getFileString(String dir) {
+        FileSystem fs = FileSystems.getDefault();
+        Path path = fs.getPath(dir);
+        String fileString = path.toString();
+        System.out.println(fileString);
+        return fileString;
     }
 }
 
