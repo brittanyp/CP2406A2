@@ -8,6 +8,7 @@ import javax.swing.*;
 public class STCardApp {
 
     public static void main(String[] args){
-        JFrame welcomeFrame = new MainFrame("ST - Welcome");
+        //JFrame welcomeFrame = new MainFrame("ST - Welcome");
+        JFrame playFrame = new GameFrame("ST - Game");
     }
 }

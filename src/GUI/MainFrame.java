@@ -14,8 +14,9 @@ public class MainFrame extends JFrame {
     public MainFrame(String title){
         super(title);
         //Define
-        setLocationRelativeTo(null);
         setSize(500, 300);
+        setLocationRelativeTo(null);
+
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST Welcome");

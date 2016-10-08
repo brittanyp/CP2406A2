@@ -7,12 +7,16 @@ import java.awt.*;
  * Created by Brit on 10/9/2016.
  */
 public class GameFrame extends JFrame {
-    private InfoMenuPanel infoMenuPanel;
+    private GameDeckPanel gameDeckPanel;
+    private DefaultGameLayout defaultGameLayout;
 
     public GameFrame(String title){
         super(title);
         //Define
+        setSize(1000, 850);
         setLocationRelativeTo(null);
+
+        //setLocationRelativeTo(null);
         setSize(1000, 850);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,11 +25,12 @@ public class GameFrame extends JFrame {
         //Set layout manager
         setLayout(new BorderLayout());
         //Create swing items
-        infoMenuPanel = new InfoMenuPanel(this);
+        defaultGameLayout = new DefaultGameLayout(this);
+
 
         // Add swing items to content pane
         Container mainPane = getContentPane();
-        mainPane.add(infoMenuPanel, BorderLayout.NORTH);
+        mainPane.add(defaultGameLayout, BorderLayout.NORTH);
 
     }
 }

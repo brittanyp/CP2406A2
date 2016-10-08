@@ -41,6 +41,14 @@ public class WelcomePanel extends JPanel {
             }
         });
 
+        btnPlayGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                topFrame.dispose();
+                JFrame gameFrame = new GameFrame("ST - Game");
+            }
+        });
+
         //Create layout
         setLayout(new GridBagLayout());
         GridBagConstraints welcomeLayout = new GridBagConstraints();

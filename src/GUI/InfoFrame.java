@@ -12,8 +12,8 @@ public class InfoFrame extends JFrame {
     public InfoFrame(String title) {
         super(title);
         //Define
-        setLocationRelativeTo(null);
         setSize(500, 300);
+        setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST - Information");
