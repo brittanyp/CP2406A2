@@ -1,7 +1,6 @@
 /**
  * Created by Brit on 9/13/2016.
  */
-//Todo: Fix path
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,9 +19,9 @@ import java.util.ArrayList;
 public class ReadFile {
     public static STDeck ReadTheFile() throws Exception{
         //PC path
-        String path = "F:\\Uni\\SP_3_IT\\CP2406\\Completed assignment 1\\CP2406A1\\MstCards_151021.xml";
+        String path = "F:\\Uni\\SP_3_IT\\CP2406\\A2\\CP2406A2\\MstCards_151021.xml";
         //USB path
-        //String path = "H:\\IT\\SP_3_IT\\CP2406\\Completed assignment 1\\MstCards_151021.xml";
+        //String path = "MstCards_151021.xml";
         String strPath = getFileString(path);
         //Path to file
          STDeck deck = new STDeck();

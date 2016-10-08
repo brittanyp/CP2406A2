@@ -3,7 +3,7 @@ import java.util.Scanner;
  * Created by Brittany Peever on 9/11/2016.
  */
 
-public class CP2406A1 {
+public class CP2406A2 {
     //Define menuchoices
     private static final int NEW_GAME = 1;
     private static final int INFO = 2;
