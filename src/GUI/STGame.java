@@ -1,3 +1,7 @@
+package GUI;
+
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -8,13 +12,13 @@ import java.util.Scanner;
 
 public class STGame {
     int WAITTIME = 3000;
-    private static final int NUM_OF_CARDS_TO_DEAL = 3;
-    private int numOfPlayers;
-    private STPlayer[] players;
-    private STDeck deck;
+    static final int NUM_OF_CARDS_TO_DEAL = 3;
+    int numOfPlayers;
+    STPlayer[] players;
+    STDeck deck;
     boolean gameIsOn = true;
     int humanplayerID;
-    private String playingCategory;
+    String playingCategory;
     String playingCategoryValue;
     STCard playedCard;
     int dealerID;
@@ -45,89 +49,22 @@ public class STGame {
         }
     }
 
-    public void playGame() {
+    public void playGame(JFrame topframe, DefaultGameLayout gameLayout ) {
+
         //Iterates through rounds until game winning conditions are met
         String category = "";
         boolean exit = false;
         //Inital start
         if (players[0].getID() == humanplayerID) {
             //Human
-                ArrayList<Object> hand = (ArrayList<Object>) players[0].getHand();
-                int x = 0;
-                for (Object card : hand) {
-                    //Print hand
-                    STCard transformedCard = (STCard) card;
-                    System.out.println("---------- Card " + x + " ----------");
-                    printCard(transformedCard);
-                    System.out.println("");
-                    x = x + 1;
-                }
-                System.out.println("You are the first player\n" +
-                        "Choose the category you want to play:\n" + "1. Hardness\n2. Specific Gravity\n3. Cleavage\n" +
-                        "4. Crustal abundance\n5. Economic Value");
+            //ArrayList<Object> hand = (ArrayList<Object>) players[0].getHand();
+            //int x = 0;
+            //Todo: fix this
+            gameLayout.addHandPanel(players[0]);
 
-                int userChoice = getUserInputInt();
-                while (userChoice > 5 || userChoice < 1) {
-                    System.out.println("Invalid Choice");
-                    userChoice = getUserInputInt();
-                }
-                switch (userChoice) {
-                    case 1:
-                        category = "hardness";
-                        break;
-                    case 2:
-                        category = "specific gravity";
-                        break;
-                    case 3:
-                        category = "cleavage";
-                        break;
-                    case 4:
-                        category = "crustal abundance";
-                        break;
-                    case 5:
-                        category = "economic value";
-                        break;
-                }
-                System.out.println("-----------------------------");
-            }
-         else {
-            //Bot
-            category = getRandomCategory();
-            try {
-                //Delays process for WAITTIME ms
-                Thread.sleep(WAITTIME);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
-            }
         }
-        resetPlayedCard(category);
-
-        while (gameIsOn) {
-            //Iterates through rounds
-            boolean playerWin = false;
-            for (int i = 0; i < players.length; i++) {
-                STPlayer player = players[i];
-                try {
-                    //Delays process for WAITTIME ms
-                    Thread.sleep(WAITTIME);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                }
-                if (player.getID() == humanplayerID) {
-                    playerWin = playHumanTurn(player);
-                    if (gameIsOn==false){
-                        System.out.println("Quitting game");
-                        break;
-                    }
-                } else {
-                    playerWin = playBotTurn(player);
-                }
-                if (playerWin) {
-                    gameIsOn = false;
-                    break;
-                }
-
-            }
+        else{
+            System.out.println("Nah bruh");
         }
     }
 
@@ -703,11 +640,13 @@ public class STGame {
         //Assigns human player to random position
         int playerPostion = new Random().nextInt(players.length);
         humanplayerID = playerPostion;
+        //Todo: remove this, testing code
+        humanplayerID = 0;
     }
 
     public void printCard(STCard transformedCard) {
         //Prints card depending on what play type
-        //Passed STCard
+        //Passed GUI.STCard
         if (transformedCard.getCard_type().equals("play")) {
             STPlayCard playCard = (STPlayCard) transformedCard;
 
@@ -722,6 +661,10 @@ public class STGame {
     public STPlayer getHumanPlayer() {
         //Returns human player ID
         return players[humanplayerID];
+    }
+
+    public int getDeckSize(){
+        return deck.getDeckSize();
     }
 
 

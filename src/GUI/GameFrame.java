@@ -2,35 +2,34 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Brit on 10/9/2016.
  */
 public class GameFrame extends JFrame {
-    private GameDeckPanel gameDeckPanel;
     private DefaultGameLayout defaultGameLayout;
 
-    public GameFrame(String title){
+    public GameFrame(String title, int playersNum, STGame game) {
         super(title);
+        GameFrame currentFrame = this;
         //Define
-        setSize(1000, 850);
+        setSize(1300, 950);
         setLocationRelativeTo(null);
-
-        //setLocationRelativeTo(null);
-        setSize(1000, 850);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST - Game");
 
         //Set layout manager
         setLayout(new BorderLayout());
-        //Create swing items
-        defaultGameLayout = new DefaultGameLayout(this);
-
-
-        // Add swing items to content pane
         Container mainPane = getContentPane();
-        mainPane.add(defaultGameLayout, BorderLayout.NORTH);
 
+
+        defaultGameLayout = new DefaultGameLayout(this, playersNum, game);
+        mainPane.add(defaultGameLayout, BorderLayout.NORTH);
+        pack();
+        game.playGame(this, defaultGameLayout);
     }
+
 }

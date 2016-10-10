@@ -9,6 +9,6 @@ public class STCardApp {
 
     public static void main(String[] args){
         //JFrame welcomeFrame = new MainFrame("ST - Welcome");
-        JFrame playFrame = new GameFrame("ST - Game");
+        JFrame NumberFrame = new NumberFrame("ST - Number of Players");
     }
 }

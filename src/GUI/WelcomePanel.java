@@ -45,7 +45,7 @@ public class WelcomePanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 topFrame.dispose();
-                JFrame gameFrame = new GameFrame("ST - Game");
+                JFrame NumberFrame = new NumberFrame("ST - Number of Players");
             }
         });
 

@@ -1,3 +1,5 @@
+package GUI;
+
 import java.util.Scanner;
 /**
  * Created by Brittany Peever on 9/11/2016.
@@ -30,7 +32,7 @@ public class CP2406A2 {
                         break;
                     }
                     game = beginNewGame(deck);
-                    game.playGame();
+//                    game.playGame();
                     break;
 
                 case INFO:
@@ -79,7 +81,7 @@ public class CP2406A2 {
 
     private static void showPlayer(STPlayer humanPlayer) {
         //Show players position and hand size
-        //Passed instance of STPlayer
+        //Passed instance of GUI.STPlayer
         System.out.println("Your position is: " + humanPlayer);
     }
 

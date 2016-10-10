@@ -1,3 +1,5 @@
+package GUI;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -5,7 +7,7 @@ import java.util.Objects;
 /**
  * Created by Brit on 9/11/2016.
  */
-//Class for Super Trump Card, extends on STCard
+//Class for Super Trump Card, extends on GUI.STCard
 
 public class STCard{
     public int id;

@@ -1,7 +1,9 @@
+package GUI;
+
 /**
  * Created by Brit on 9/15/2016.
  */
-//Class Super Trump Trump Card extends on STCard
+//Class Super Trump Trump Card extends on GUI.STCard
 
 public class STTrumpCard extends STCard {
     public String subtitle;

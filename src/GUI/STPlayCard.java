@@ -1,8 +1,10 @@
+package GUI;
+
 import java.util.ArrayList;
 /**
  * Created by Brit on 9/15/2016.
  */
-//Class for Super Trump Play cards that extends on STCard
+//Class for Super Trump Play cards that extends on GUI.STCard
 
 public class STPlayCard extends STCard {
     public String specific_gravity, hardness, chemistry, classification,crystal_system, cleavage, crustal_abundance, economic_value;
