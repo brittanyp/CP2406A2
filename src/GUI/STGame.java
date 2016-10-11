@@ -11,7 +11,9 @@ import java.util.Scanner;
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-    int WAITTIME = 3000;
+    //Problem does not show botplayers turn
+
+    int WAITTIME = 2000;
     static final int NUM_OF_CARDS_TO_DEAL = 8;
     int numOfPlayers;
     STPlayer[] players;
@@ -46,7 +48,6 @@ public class STGame {
         for (int i=0; i<hand.size() ;i++){
             Object handCard = hand.get(i);
             STCard tHandCard = (STCard) handCard;
-            //Current player over reach by 1
             if(tHandCard == card){
                 hand.remove(tHandCard);
             }
@@ -62,13 +63,11 @@ public class STGame {
         }
     }
 
-    public void playGame(JFrame topframe, DefaultGameLayout gameLayout ) {
+    public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
         //Inital Start
-        String category = "";
-        boolean exit = false;
-        //Set random start values
+        //Set random start category
         String tempcategory=getRandomCategory();
-        resetPlayedCard(tempcategory);
+        resetPlayedCard(tempcategory, "Slide66.jpg");
         //Update Layout
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg");
         gameLayout.addHandPanel(players[0]);
@@ -88,23 +87,6 @@ public class STGame {
                 topFrame.dispose();
                 //Set Card
                 compareCategory(card, true);
-                //Remove card and Update currentPlayer
-                removeCardFromHand(players[currentPlayer], card);
-                int tempPlayerNum= currentPlayer + 1;
-                if (tempPlayerNum <= numOfPlayers){
-                    currentPlayer = tempPlayerNum;}
-                else{
-                    currentPlayer = 0;
-                }
-
-                //Update layout
-                gameLayout.ableAllComponents(true);
-                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
-                gameLayout.addHandPanel(getHumanPlayer());
-                gameLayout.ableHandButtons(false);
-
-                //Initate next round
-                playRound(gameLayout);
             }
         }
         else{
@@ -114,21 +96,95 @@ public class STGame {
                 //Special get user input I hate this card
             }
             else{
-            resetPlayedCard(tcard.getSubtitle());}
+                resetPlayedCard(tcard.getSubtitle(), card.getFileName());
+            }
         }
+        //Remove card and Update currentPlayer
+        removeCardFromHand(players[currentPlayer], card);
+        int tempPlayerNum= currentPlayer + 1;
+        if (tempPlayerNum < numOfPlayers){
+            currentPlayer = tempPlayerNum;}
+        else{
+            currentPlayer = 0;
+        }
+
+        //Update layout
+        gameLayout.ableAllComponents(true);
+        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+        gameLayout.addHandPanel(getHumanPlayer());
+        gameLayout.ableHandButtons(false);
+
+        //Initate next round
+        playRound(gameLayout);
     }
 
 
     public void playRound(DefaultGameLayout gameLayout){
-        int playerInt = currentPlayer;
 
-        if (players[playerInt].getID() == humanplayerID) {
+        //Check If human player
+        if (players[currentPlayer].getID()== humanplayerID) {
             gameLayout.ableHandButtons(true);
+        }
+        else{
+            playBotTurn(gameLayout);
+        }
+
+    }
+
+    private void playBotTurn(DefaultGameLayout gameLayout){
+        //Simulate player deciding
+        try {
+            //Delays process for WAITTIME ms
+            Thread.sleep(WAITTIME);
+        } catch (InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        //Define Hand
+        System.out.println(currentPlayer);
+        Object hand = players[currentPlayer].getHand();
+        ArrayList<STCard> tHand = (ArrayList<STCard>) hand;
+        int x = 0;
+
+        //Make array of valid selection
+        ArrayList<Integer> validCards = new ArrayList<Integer>();
+        for (STCard card : tHand){
+            boolean cardValid=false;
+
+            if(card.getCard_type().equals("play")){
+                cardValid=compareCategory(card, false);
+            }
+            if(cardValid){
+                validCards.add(x);
+            }
+            x=x+1;
+        }
+
+        if (validCards.size()!=0) {
+            int randomInt = new Random().nextInt(tHand.size());
+            while (validCards.contains(randomInt) == false) {
+                randomInt = new Random().nextInt(tHand.size());
+            }
+            Object selectedCard = tHand.get(randomInt);
+            //Set card as playedCard
+            //compareCategory(selectedCard, true);
+            boolean testing = compareCategory(selectedCard, true);
+            //Remove selected card
+            removeCardFromHand(players[currentPlayer], (STCard) selectedCard);
         }
         else{
 
         }
-
+        //Update currentPlayer
+        int tempPlayerNum= currentPlayer + 1;
+        if (tempPlayerNum < numOfPlayers){
+            currentPlayer = tempPlayerNum;}
+        else{
+            currentPlayer = 0;
+        }
+        //Update layout
+        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+        //Play next round
+        playRound(gameLayout);
     }
 
 
@@ -165,12 +221,12 @@ public class STGame {
         return selectedCategory;
     }
 
-    public void resetPlayedCard(String category) {
+    public void resetPlayedCard(String category, String fileName) {
         //Resets the variables playedCard and playingCategory to a origin card that holds the smallest playering
         // values for each category
         category = category.toLowerCase();
         ArrayList<String> originArray = new ArrayList<String>();
-        STPlayCard originCard = new STPlayCard(101, "OriginCard", "NA", "play",
+        STPlayCard originCard = new STPlayCard(101, fileName, "NA", "play",
                 "OriginCard", "NA", "NA", "NA", originArray, "0", "0", "none",
                 "ultratrace", "trivial");
 

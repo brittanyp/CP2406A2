@@ -141,6 +141,7 @@ public class DefaultGameLayout extends JPanel {
     }
 
     public void setPlayedCardImage(JLabel lbl, String fileName){
+        System.out.println("images\\" + fileName);
         ImageIcon playedCardImage = new ImageIcon(new ImageIcon("images\\"+ fileName).
                 getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
         lbl.setIcon(playedCardImage);
@@ -175,9 +176,10 @@ public class DefaultGameLayout extends JPanel {
     public void updateLayout(String category, String value, int playerNum, String fileName){
         lblCategory.setText("Category: " + category);
         lblValue.setText("Value: " + value);
-        String strPlayerNum = Integer.toString(playerNum);
+        String strPlayerNum = Integer.toString(playerNum +1);
         lblPlayerValue.setText(strPlayerNum);
         setPlayedCardImage(lblPlayedCardIcon, fileName);
+        this.repaint();
     }
 
 

@@ -29,7 +29,7 @@ public class GameFrame extends JFrame {
         defaultGameLayout = new DefaultGameLayout(this, playersNum, game);
         mainPane.add(defaultGameLayout, BorderLayout.NORTH);
         pack();
-        game.playGame(this, defaultGameLayout);
+        game.initiateGame(this, defaultGameLayout);
     }
 
 }
