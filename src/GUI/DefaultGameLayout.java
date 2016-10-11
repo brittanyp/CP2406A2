@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -14,8 +13,18 @@ import java.util.ArrayList;
  */
 public class DefaultGameLayout extends JPanel {
     JPanel handPanel = new JPanel();
+    JLabel lblPlayerValue;
+    JLabel lblPlayer;
+    JLabel lblCategory;
+    JLabel lblValue;
 
-    public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame game){
+    JLabel lblGuide;
+    JLabel lblPlayedCardIcon;
+    JLabel lblDeckCount;
+
+    STGame game;
+    public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame passedgame){
+        game = passedgame;
         int decksize = game.getDeckSize();
 
         //Create Panel
@@ -25,28 +34,29 @@ public class DefaultGameLayout extends JPanel {
         setPreferredSize(size);
 
         //Create J objects
-        JLabel lblCategory = new JLabel("Category: " + game.playingCategory);
-        JLabel lblValue = new JLabel("Value: " + game.playingCategoryValue);
+        lblPlayer = new JLabel("Player: ");
+        lblPlayerValue = new JLabel("0");
+        lblCategory = new JLabel("Category: " + game.playingCategory);
+        lblValue = new JLabel("Value: " + game.playingCategoryValue);
 
         JButton btnQuit = new JButton("Quit");
-        JLabel lblGuide = new JLabel("Welcome");
+        lblGuide = new JLabel("Welcome");
 
         //PlayedCard Panel
         JLabel lblPlayedCard = new JLabel("Played Card");
-        JLabel lblPlayedCardIcon = new JLabel();
-        ImageIcon playedCardImage = new ImageIcon(new ImageIcon("images\\Slide66.jpg").
-                getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
-        lblPlayedCardIcon.setIcon(playedCardImage);
+        lblPlayedCardIcon = new JLabel();
+        setPlayedCardImage(lblPlayedCardIcon, "Slide66.jpg");
+
 
         //Deck Panel
-        JLabel lblDeckCount = new JLabel("Deck: " + decksize);
+        lblDeckCount = new JLabel("Deck: " + decksize);
         JLabel lblDeckIcon = new JLabel();
         ImageIcon DeckCardImage = new ImageIcon(new ImageIcon("images\\Slide66.jpg").
                 getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
         lblDeckIcon.setIcon(DeckCardImage);
 
         //Hand Panel
-        JLabel lblhand = new JLabel("Your Hand --->");
+        JLabel lblhand = new JLabel("Position: " + game.getHumanPlayer()+ "--->");
 
 
         //Create button functions
@@ -80,13 +90,10 @@ public class DefaultGameLayout extends JPanel {
         add(lblGuide, defaultLayout);
 
         //Row 0, Column 2
-        /*
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 2;
         defaultLayout.gridy = 0;
-        add(btnConfirmCat, defaultLayout);
-        add(getCategorySelect(cmbCategory, btnConfirmCat), defaultLayout);
-        */
+        add(getPlayer(lblPlayer, lblPlayerValue), defaultLayout);
 
         //Row 1, Column 0
         defaultLayout.weighty = 4;
@@ -100,7 +107,7 @@ public class DefaultGameLayout extends JPanel {
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 1;
         defaultLayout.anchor = GridBagConstraints.FIRST_LINE_START;
-        add(getPlayedCardPanel(lblPlayedCard, lblPlayedCardIcon), defaultLayout);
+        add(getCardPanel(lblPlayedCard, lblPlayedCardIcon), defaultLayout);
 
         //Row 1, Column 2
         defaultLayout.weighty = 4;
@@ -121,7 +128,7 @@ public class DefaultGameLayout extends JPanel {
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 2;
         defaultLayout.anchor = GridBagConstraints.CENTER;
-        handPanel.setLayout(new FlowLayout());
+        handPanel.setLayout(new GridLayout(0,4));
         add(handPanel, defaultLayout);
 
         //Row 2, Column 2
@@ -132,13 +139,20 @@ public class DefaultGameLayout extends JPanel {
         add(btnQuit, defaultLayout);
 
     }
+
+    public void setPlayedCardImage(JLabel lbl, String fileName){
+        ImageIcon playedCardImage = new ImageIcon(new ImageIcon("images\\"+ fileName).
+                getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
+        lbl.setIcon(playedCardImage);
+    }
+
     public void addHandPanel(STPlayer player){
-        String fileName, title;
+        handPanel.removeAll();
+        String title;
         ArrayList<Object> hand = (ArrayList<Object>) player.getHand();
         for (Object card : hand){
             STCard tcard = (STCard) card;
             title = tcard.getTitle();
-            fileName = tcard.getFileName();
             JButton btncard = new JButton(title);
             btncard.addActionListener(new ActionListener() {
                 @Override
@@ -146,26 +160,37 @@ public class DefaultGameLayout extends JPanel {
                     showCard(tcard);
                 }
             });
-            /*
-            ImageIcon cardImage = new ImageIcon(new ImageIcon("F:\\Uni\\SP_3_IT\\CP2406\\A2\\CP2406A2\\images\\" + fileName).
-                    getImage().getScaledInstance(192,269, Image.SCALE_DEFAULT));
-            lblcard.setIcon(cardImage);
-            */
             handPanel.add(btncard);
         }
 
     }
 
+    public void ableHandButtons(boolean enable){
+        Component[] components = handPanel.getComponents();
+        for(Component component : components){
+            component.setEnabled(enable);
+        }
+    }
+
+    public void updateLayout(String category, String value, int playerNum, String fileName){
+        lblCategory.setText("Category: " + category);
+        lblValue.setText("Value: " + value);
+        String strPlayerNum = Integer.toString(playerNum);
+        lblPlayerValue.setText(strPlayerNum);
+        setPlayedCardImage(lblPlayedCardIcon, fileName);
+    }
+
+
     public void showCard(STCard card){
-        JPanel panel = this;
-        panel.setEnabled(false);
+        this.setEnabled(false);
+        ableAllComponents(false);
         JFrame cardViewFrame = new JFrame("ST - View Card");
         cardViewFrame.setSize(400, 400);
         cardViewFrame.setLocationRelativeTo(null);
         cardViewFrame.setVisible(true);
         cardViewFrame.setTitle("ST - View Card");
         Container mainPane = cardViewFrame.getContentPane();
-        CardViewPanel cardPanel = new CardViewPanel(panel, card);
+        CardViewPanel cardPanel = new CardViewPanel(cardViewFrame, card, game, this);
         mainPane.add(cardPanel, BorderLayout.NORTH);
         cardViewFrame.pack();
         cardViewFrame.addWindowListener(new WindowListener() {
@@ -176,7 +201,7 @@ public class DefaultGameLayout extends JPanel {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                panel.setEnabled(true);
+                ableAllComponents(true);
             }
 
             @Override
@@ -206,6 +231,17 @@ public class DefaultGameLayout extends JPanel {
         });
     }
 
+    public void ableAllComponents(boolean enable){
+        Component[] components = this.getComponents();
+        for(Component component : components){
+            component.setEnabled(enable);
+        }
+        Component[] handpanelComponents = this.handPanel.getComponents();
+        for(Component component: handpanelComponents){
+            component.setEnabled(enable);
+        }
+    }
+
 
     public JPanel getValuesPanel(JLabel lbl1, JLabel lbl2) {
         JPanel valuePanel = new JPanel();
@@ -229,7 +265,7 @@ public class DefaultGameLayout extends JPanel {
         return playersIcons;
     }
 
-    public JPanel getPlayedCardPanel(JLabel lbl1, JLabel lbl2){
+    public JPanel getCardPanel(JLabel lbl1, JLabel lbl2){
         JPanel playedCardPanel = new JPanel();
         playedCardPanel.setLayout(new BoxLayout(playedCardPanel, BoxLayout.PAGE_AXIS));
         playedCardPanel.add(lbl1);
@@ -244,14 +280,13 @@ public class DefaultGameLayout extends JPanel {
         deckPanel.add(lbl2);
         return deckPanel;
     }
-/*
 
-    public JPanel getCategorySelect(JComboBox[] cb1, JButton btn1){
+
+    public JPanel getPlayer(JLabel lbl1, JLabel lbl2){
         JPanel selectionCategoryPanel = new JPanel();
         selectionCategoryPanel.setLayout(new FlowLayout());
-        selectionCategoryPanel.add(cb1);
-        selectionCategoryPanel.add(btn1);
+        selectionCategoryPanel.add(lbl1);
+        selectionCategoryPanel.add(lbl2);
         return selectionCategoryPanel;
     }
-    */
 }

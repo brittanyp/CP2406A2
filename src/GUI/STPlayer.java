@@ -18,7 +18,7 @@ public class STPlayer {
         this.hand = hand;
     }
 
-    public Object getHand(){
+    public ArrayList<Object> getHand(){
         return hand;
     }
 
@@ -35,6 +35,6 @@ public class STPlayer {
     }
 
     public String toString(){
-        return playerID + "\n Cards in Hand: " + hand.size();
+        return (playerID+1) + "\n Cards in Hand: " + hand.size();
     }
 }

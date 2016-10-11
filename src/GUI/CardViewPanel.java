@@ -2,29 +2,33 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Brit on 10/10/2016.
  */
 public class CardViewPanel extends JPanel {
-    public CardViewPanel(JPanel previousPanel,STCard card){
+    public CardViewPanel(JFrame topFrame,STCard card, STGame game, DefaultGameLayout gameLayout){
         String fileName = card.getFileName().trim();
 
         Dimension size = getPreferredSize();
-        size.height = 400;
+        size.height = 600;
         size.width = 400;
         setPreferredSize(size);
         setLayout(new FlowLayout());
         JLabel lblCardPic = new JLabel();
-        System.out.println("\\images\\" + fileName);
-        ImageIcon cardImage = new ImageIcon(new ImageIcon("\\images\\" + fileName).
-                getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
+        JButton btnConfirmCard = new JButton("Confirm Card");
+        ImageIcon cardImage = new ImageIcon(new ImageIcon("images\\" + fileName).
+                getImage().getScaledInstance(360,504, Image.SCALE_DEFAULT));
         lblCardPic.setIcon(cardImage);
         add(lblCardPic);
-
-
+        add(btnConfirmCard);
+        btnConfirmCard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.confirmButtonAction(topFrame, gameLayout, card);
+            }
+        });
     }
 }
