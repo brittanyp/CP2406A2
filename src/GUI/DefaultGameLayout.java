@@ -22,6 +22,8 @@ public class DefaultGameLayout extends JPanel {
     JLabel lblPlayedCardIcon;
     JLabel lblDeckCount;
 
+    JLabel lblhand;
+
     JButton btnQuit;
     JButton btnStart;
 
@@ -43,8 +45,8 @@ public class DefaultGameLayout extends JPanel {
         //Create J objects
         lblPlayer = new JLabel("Player: ");
         lblPlayerValue = new JLabel("0");
-        lblCategory = new JLabel("Category: " + game.playingCategory);
-        lblValue = new JLabel("Value: " + game.playingCategoryValue);
+        lblCategory = new JLabel("Category: ");
+        lblValue = new JLabel("Value: ");
 
         btnQuit = new JButton("Quit");
         lblGuide = new JLabel("Welcome");
@@ -63,7 +65,7 @@ public class DefaultGameLayout extends JPanel {
         lblDeckIcon.setIcon(DeckCardImage);
 
         //Hand Panel
-        JLabel lblhand = new JLabel("Position: " + game.getHumanPlayer()+ "--->");
+        lblhand = new JLabel("Position: " + game.getHumanPlayer());
 
 
         //Create button functions
@@ -151,7 +153,6 @@ public class DefaultGameLayout extends JPanel {
     }
 
     public void setPlayedCardImage(JLabel lbl, String fileName){
-        System.out.println("images\\" + fileName);
         ImageIcon playedCardImage = new ImageIcon(new ImageIcon("images\\"+ fileName).
                 getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
         lbl.setIcon(playedCardImage);
@@ -186,6 +187,7 @@ public class DefaultGameLayout extends JPanel {
     public void updateLayout(String category, String value, int playerNum, String fileName){
         lblCategory.setText("Category: " + category);
         lblValue.setText("Value: " + value);
+        lblhand.setText("Position: " + game.getHumanPlayer());
         String strPlayerNum = Integer.toString(playerNum +1);
         lblPlayerValue.setText(strPlayerNum);
         setPlayedCardImage(lblPlayedCardIcon, fileName);
@@ -291,6 +293,7 @@ public class DefaultGameLayout extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 btnStart.setVisible(false);
                 game.initiateGame(upperFrame, instanceOfLayout);
+                game.playRound(instanceOfLayout);
             }
         });
         return playersIcons;

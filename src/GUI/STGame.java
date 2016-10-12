@@ -2,18 +2,24 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 /**
  * Created by Brit on 9/11/2016.
  */
+//Todo: Make player icons update with skip value
+//Todo: Winning conditions
+//Todo: Make it pretty
+//Todo: Fix bug; no valid cards to play but still asks for button input
+
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-    //Problem does not show botplayers turn
 
-    int WAITTIME = 2000;
+    int WAITTIME = 3000;
     static final int NUM_OF_CARDS_TO_DEAL = 8;
     int numOfPlayers;
     STPlayer[] players;
@@ -72,10 +78,10 @@ public class STGame {
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg");
         gameLayout.addHandPanel(players[humanplayerID]);
         gameLayout.ableHandButtons(false);
-
     }
 
     public void confirmButtonAction(JFrame topFrame, DefaultGameLayout gameLayout,STCard card){
+        //Human action
         if(card.getCard_type().equals("play")){
             boolean valid;
 
@@ -89,7 +95,7 @@ public class STGame {
                 //Remove card and Update currentPlayer
                 removeCardFromHand(players[currentPlayer], card);
                 int tempPlayerNum= currentPlayer + 1;
-                if (tempPlayerNum < numOfPlayers){
+                if (tempPlayerNum <= numOfPlayers){
                     currentPlayer = tempPlayerNum;}
                 else{
                     currentPlayer = 0;
@@ -137,34 +143,165 @@ public class STGame {
                 playRound(gameLayout);
             }
         }
-
     }
 
 
     public void playRound(DefaultGameLayout gameLayout){
+        if (checkResetPlayersSkip()) {
+            resetPlayedCard(getRandomCategory(), playedCard.getFileName());
+            resetAllPlayerSkip();
+        }
 
-        //Check If human player
-        if (players[currentPlayer].getID()== humanplayerID) {
-            gameLayout.ableHandButtons(true);
+        //Check if player is skipable
+        if(players[currentPlayer].getPlayerSkip()==false) {
+            System.out.println(currentPlayer);
+            //Check If human player
+            if (players[currentPlayer].getID() == humanplayerID) {
+                if (checkValidHand() == true) {
+                    ActionListener task = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            gameLayout.notifyUser("It is your turn to play a card");
+                            gameLayout.ableHandButtons(true);
+                        }
+                    };
+                    Timer timer = new Timer(100, task);
+                    timer.setRepeats(false);
+                    timer.start();
+
+                    try {
+                        Thread.sleep(WAITTIME);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    playHumanNoValidCards(gameLayout);
+                }
+            } else {
+                gameLayout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
+                //Simulate player deciding
+                ActionListener task = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        playBotTurn(gameLayout);
+                    }
+                };
+                Timer timer = new Timer(100, task);
+                timer.setRepeats(false);
+                timer.start();
+
+                try {
+                    Thread.sleep(WAITTIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         else{
-            playBotTurn(gameLayout);
+            if(currentPlayer == humanplayerID) {
+                gameLayout.notifyUser("You are still skipped!");
+            }
+            else{
+                gameLayout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
+            }
+
+            ActionListener task = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int tempPlayerNum= currentPlayer + 1;
+                    if (tempPlayerNum <= numOfPlayers){
+                        currentPlayer = tempPlayerNum;}
+                    else{
+                        currentPlayer = 0;
+                    }
+                    playRound(gameLayout);
+                }
+            };
+            Timer timer = new Timer(100, task);
+            timer.setRepeats(false);
+            timer.start();
+
+            try {
+                Thread.sleep(WAITTIME);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
-    private void playBotTurn(DefaultGameLayout gameLayout){
-        //Simulate player deciding
+    private boolean checkResetPlayersSkip() {
+        //Method that iterates through players to check the players skip value
+        //Returns boolean answer which stores if there is only one person without skip value true
+        boolean answer = false;
+        int noSkipCounter = 0;
+        for (STPlayer player : players) {
+            if (player.getPlayerSkip() == true) {
+                noSkipCounter = noSkipCounter + 1;
+            }
+        }
+        if (noSkipCounter >= players.length - 1) {
+            answer = true;
+        }
+        return answer;
+    }
+
+
+    private boolean checkValidHand() {
+        boolean result = false;
+        //Get hand
+        Object hand = players[currentPlayer].getHand();
+        ArrayList<STCard> tHand = (ArrayList<STCard>) hand;
+
+        //Make array of valid selection
+        ArrayList<Integer> validCards = new ArrayList<Integer>();
+        for (STCard card : tHand) {
+            if (card.getCard_type().equals("play")) {
+                //Play Cards
+                boolean validCard;
+                validCard = compareCategory(card, false);
+                if(validCard==true){
+                    result=true;
+                }
+            } else {
+                //Trump Cards
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    private void playHumanNoValidCards(DefaultGameLayout gameLayout){
+        System.out.println("No valid cards human");
+        gameLayout.notifyUser("Oh no! You have no valid cards in your hand. You will be skipped " +
+                "until a trump card is played");
+        ActionListener task = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                players[currentPlayer].setPlayerSkip(true);
+                dealSingleCardToPlayer(players[currentPlayer].getHand());
+                int tempPlayerNum= currentPlayer + 1;
+                if (tempPlayerNum <= numOfPlayers){
+                    currentPlayer = tempPlayerNum;}
+                else{
+                    currentPlayer = 0;
+                }
+                playRound(gameLayout);
+            }
+        };
+        Timer timer = new Timer(100, task);
+        timer.setRepeats(false);
+        timer.start();
 
         try {
-            //Delays process for WAITTIME ms
-            Thread.sleep(WAITTIME);
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
+            Thread.sleep(WAITTIME+1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+    }
 
+    private void playBotTurn(DefaultGameLayout gameLayout){
         //Define Hand
-        System.out.println(currentPlayer);
         Object hand = players[currentPlayer].getHand();
         ArrayList<STCard> tHand = (ArrayList<STCard>) hand;
         int x = 0;
@@ -175,8 +312,15 @@ public class STGame {
             boolean cardValid=false;
 
             if(card.getCard_type().equals("play")){
+                //Play Cards
                 cardValid=compareCategory(card, false);
             }
+
+            else{
+                //Trump Cards
+                cardValid = true;
+            }
+
             if(cardValid){
                 validCards.add(x);
             }
@@ -188,16 +332,39 @@ public class STGame {
             while (validCards.contains(randomInt) == false) {
                 randomInt = new Random().nextInt(tHand.size());
             }
-            Object selectedCard = tHand.get(randomInt);
+            STCard selectedCard = tHand.get(randomInt);
+            if (selectedCard.getCard_type().equals("play")){
             //Set card as playedCard
-            //compareCategory(selectedCard, true);
             boolean testing = compareCategory(selectedCard, true);
             //Remove selected card
             removeCardFromHand(players[currentPlayer], (STCard) selectedCard);
+            //Notify user
+            }
+            else{
+                STTrumpCard tcard = (STTrumpCard) selectedCard;
+                if(tcard.getSubtitle().equals("Change to trumps category of your choice")){
+                    //Special get user input I hate this card
+                }
+                else{
+                    //Trump Cards
+                    resetPlayedCard(tcard.getSubtitle(), selectedCard.getFileName());
+                    //Remove card and Update currentPlayer
+                    removeCardFromHand(players[currentPlayer], selectedCard);
+                }
+            }
+            gameLayout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
         }
         else{
-            //Skip state = true, add card to deck
+            //No valid Cards
+            //Set skip and deal card
+            players[currentPlayer].setPlayerSkip(true);
+            dealSingleCardToPlayer(players[currentPlayer].getHand());
+
+            System.out.println("No valid cards");
+            gameLayout.notifyUser("Player " + (currentPlayer + 1) + " has no valid cards to play and will be skipped");
         }
+
+
         //Update currentPlayer
         int tempPlayerNum= currentPlayer + 1;
         if (tempPlayerNum < numOfPlayers){
@@ -206,7 +373,6 @@ public class STGame {
             currentPlayer = 0;
         }
 
-        System.out.println(playedCard.toString());
         //Update layout
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
         //Play next round
@@ -275,9 +441,10 @@ public class STGame {
                 playingCategoryValue = originCard.getEconomic_value();
                 break;
         }
+        resetAllPlayerSkip();
     }
 
-    public boolean compareCategory(Object object, boolean setValue) {
+    public boolean compareCategory(STCard object, boolean setValue) {
         //Function that compares a card with the current playing category and playing category value
         //Passed Card and setValue which determines if the playingcategory and playingcategoryvalue are
         //updated
@@ -520,7 +687,10 @@ public class STGame {
                 break;
         }
         if (setValue) {
+
             playedCard = playCard;
+
+            System.out.println(playedCard.toString());
             playingCategoryValue = newValue;
         }
         return valid;

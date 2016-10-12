@@ -33,7 +33,7 @@ public class GameFrame extends JFrame {
         //Wait for user to start
         defaultGameLayout.ableAllComponents(false);
         defaultGameLayout.setStartnQuitButtonAble();
-        game.playRound(defaultGameLayout);
+
     }
 
 }
