@@ -70,10 +70,9 @@ public class STGame {
         resetPlayedCard(tempcategory, "Slide66.jpg");
         //Update Layout
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg");
-        gameLayout.addHandPanel(players[0]);
+        gameLayout.addHandPanel(players[humanplayerID]);
         gameLayout.ableHandButtons(false);
-        //Start Round
-        playRound(gameLayout);
+
     }
 
     public void confirmButtonAction(JFrame topFrame, DefaultGameLayout gameLayout,STCard card){
@@ -87,6 +86,28 @@ public class STGame {
                 topFrame.dispose();
                 //Set Card
                 compareCategory(card, true);
+                //Remove card and Update currentPlayer
+                removeCardFromHand(players[currentPlayer], card);
+                int tempPlayerNum= currentPlayer + 1;
+                if (tempPlayerNum < numOfPlayers){
+                    currentPlayer = tempPlayerNum;}
+                else{
+                    currentPlayer = 0;
+                }
+
+                //Update layout
+                gameLayout.ableAllComponents(true);
+                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+                gameLayout.addHandPanel(getHumanPlayer());
+                gameLayout.ableHandButtons(false);
+
+                //Initate next round
+                playRound(gameLayout);
+            }
+            else{
+                topFrame.dispose();
+                gameLayout.ableAllComponents(true);
+                gameLayout.notifyUser("!! Invalid Card Selection: "+ card.toString() + " !!");
             }
         }
         else{
@@ -97,25 +118,26 @@ public class STGame {
             }
             else{
                 resetPlayedCard(tcard.getSubtitle(), card.getFileName());
+                //Remove card and Update currentPlayer
+                removeCardFromHand(players[currentPlayer], card);
+                int tempPlayerNum= currentPlayer + 1;
+                if (tempPlayerNum < numOfPlayers){
+                    currentPlayer = tempPlayerNum;}
+                else{
+                    currentPlayer = 0;
+                }
+
+                //Update layout
+                gameLayout.ableAllComponents(true);
+                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+                gameLayout.addHandPanel(getHumanPlayer());
+                gameLayout.ableHandButtons(false);
+
+                //Initate next round
+                playRound(gameLayout);
             }
         }
-        //Remove card and Update currentPlayer
-        removeCardFromHand(players[currentPlayer], card);
-        int tempPlayerNum= currentPlayer + 1;
-        if (tempPlayerNum < numOfPlayers){
-            currentPlayer = tempPlayerNum;}
-        else{
-            currentPlayer = 0;
-        }
 
-        //Update layout
-        gameLayout.ableAllComponents(true);
-        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
-        gameLayout.addHandPanel(getHumanPlayer());
-        gameLayout.ableHandButtons(false);
-
-        //Initate next round
-        playRound(gameLayout);
     }
 
 
@@ -133,12 +155,14 @@ public class STGame {
 
     private void playBotTurn(DefaultGameLayout gameLayout){
         //Simulate player deciding
+
         try {
             //Delays process for WAITTIME ms
             Thread.sleep(WAITTIME);
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
+
         //Define Hand
         System.out.println(currentPlayer);
         Object hand = players[currentPlayer].getHand();
@@ -172,7 +196,7 @@ public class STGame {
             removeCardFromHand(players[currentPlayer], (STCard) selectedCard);
         }
         else{
-
+            //Skip state = true, add card to deck
         }
         //Update currentPlayer
         int tempPlayerNum= currentPlayer + 1;
@@ -181,6 +205,8 @@ public class STGame {
         else{
             currentPlayer = 0;
         }
+
+        System.out.println(playedCard.toString());
         //Update layout
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
         //Play next round
@@ -505,7 +531,7 @@ public class STGame {
         int playerPostion = new Random().nextInt(players.length);
         humanplayerID = playerPostion;
         //Todo: remove this, testing code
-        humanplayerID = 0;
+        humanplayerID = 1;
     }
 
     public STPlayer getHumanPlayer() {

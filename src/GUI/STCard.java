@@ -37,4 +37,8 @@ public class STCard{
     public String getTitle(){
         return title;
     }
+
+    public String toString(){
+        return "Card: " + getTitle();
+    }
 }

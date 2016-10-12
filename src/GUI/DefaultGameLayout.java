@@ -22,8 +22,15 @@ public class DefaultGameLayout extends JPanel {
     JLabel lblPlayedCardIcon;
     JLabel lblDeckCount;
 
+    JButton btnQuit;
+    JButton btnStart;
+
     STGame game;
+    JFrame upperFrame;
+    DefaultGameLayout instanceOfLayout = this;
     public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame passedgame){
+
+        upperFrame = topFrame;
         game = passedgame;
         int decksize = game.getDeckSize();
 
@@ -39,7 +46,7 @@ public class DefaultGameLayout extends JPanel {
         lblCategory = new JLabel("Category: " + game.playingCategory);
         lblValue = new JLabel("Value: " + game.playingCategoryValue);
 
-        JButton btnQuit = new JButton("Quit");
+        btnQuit = new JButton("Quit");
         lblGuide = new JLabel("Welcome");
 
         //PlayedCard Panel
@@ -106,15 +113,18 @@ public class DefaultGameLayout extends JPanel {
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 1;
-        defaultLayout.anchor = GridBagConstraints.FIRST_LINE_START;
+        defaultLayout.anchor = GridBagConstraints.CENTER;
         add(getCardPanel(lblPlayedCard, lblPlayedCardIcon), defaultLayout);
+
 
         //Row 1, Column 2
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 2;
         defaultLayout.gridy = 1;
-        defaultLayout.anchor = GridBagConstraints.FIRST_LINE_START;
+        defaultLayout.anchor = GridBagConstraints.CENTER;
         add(getDeckPanel(lblDeckCount, lblDeckIcon), defaultLayout);
+
+
 
         //Row 2, Column 0
         defaultLayout.weighty = 4;
@@ -179,7 +189,8 @@ public class DefaultGameLayout extends JPanel {
         String strPlayerNum = Integer.toString(playerNum +1);
         lblPlayerValue.setText(strPlayerNum);
         setPlayedCardImage(lblPlayedCardIcon, fileName);
-        this.repaint();
+        upperFrame.repaint();
+
     }
 
 
@@ -233,6 +244,11 @@ public class DefaultGameLayout extends JPanel {
         });
     }
 
+    public void setStartnQuitButtonAble(){
+        btnStart.setEnabled(true);
+        btnQuit.setEnabled(true);
+    }
+
     public void ableAllComponents(boolean enable){
         Component[] components = this.getComponents();
         for(Component component : components){
@@ -242,6 +258,10 @@ public class DefaultGameLayout extends JPanel {
         for(Component component: handpanelComponents){
             component.setEnabled(enable);
         }
+    }
+
+    public void notifyUser(String message){
+        lblGuide.setText(message);
     }
 
 
@@ -264,6 +284,15 @@ public class DefaultGameLayout extends JPanel {
             playersIcons.add(lblplayerIcons);
             playersIcons.add(lblplayer);
         }
+        btnStart = new JButton("Start Game");
+        add(btnStart);
+        btnStart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnStart.setVisible(false);
+                game.initiateGame(upperFrame, instanceOfLayout);
+            }
+        });
         return playersIcons;
     }
 
