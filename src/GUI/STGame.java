@@ -14,13 +14,17 @@ import java.util.Scanner;
 //Todo: Make it pretty
 //Todo: Fix bug; no valid cards to play but still asks for button input
 //Todo: Fix bug; no hand shown but 1 card in hand
+//Todo: Add geologist card condition
+//Todo: No deck to pull card thingy
+//Todo: User doesnt update icons
+//Todo: card adds to wrong player?
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
 
     int WAITTIME = 3000;
-    static final int NUM_OF_CARDS_TO_DEAL = 8;
+    static final int NUM_OF_CARDS_TO_DEAL = 3;
     int numOfPlayers;
     STPlayer[] players;
     STDeck deck;
@@ -80,6 +84,15 @@ public class STGame {
         gameLayout.ableHandButtons(false);
     }
 
+    public boolean checkWin(STPlayer player){
+        boolean win = false;
+        ArrayList <Object> hand = player.getHand();
+        if (hand.size()==0){
+            win = true;
+        }
+        return win;
+    }
+
     public void confirmButtonAction(JFrame topFrame, DefaultGameLayout gameLayout,STCard card){
         //Human action
         if(card.getCard_type().equals("play")){
@@ -94,6 +107,7 @@ public class STGame {
                 compareCategory(card, true);
                 //Remove card and Update currentPlayer
                 removeCardFromHand(players[currentPlayer], card);
+                int selectedPlayer = currentPlayer;
                 int tempPlayerNum= currentPlayer + 1;
                 if (tempPlayerNum <= numOfPlayers){
                     currentPlayer = tempPlayerNum;}
@@ -107,8 +121,12 @@ public class STGame {
                 gameLayout.addHandPanel(getHumanPlayer());
                 gameLayout.ableHandButtons(false);
 
-                //Initate next round
-                playRound(gameLayout);
+                if (checkWin(players[selectedPlayer])==true){
+                    showWin(players[selectedPlayer], gameLayout);
+                }
+                else{
+                    //Initate next round
+                    playRound(gameLayout);}
             }
             else{
                 topFrame.dispose();
@@ -120,12 +138,15 @@ public class STGame {
             topFrame.dispose();
             STTrumpCard tcard = (STTrumpCard) card;
             if(tcard.getSubtitle().equals("Change to trumps category of your choice")){
+                System.out.println("AHHHHH");
                 //Special get user input I hate this card
             }
             else{
                 resetPlayedCard(tcard.getSubtitle(), card.getFileName());
                 //Remove card and Update currentPlayer
                 removeCardFromHand(players[currentPlayer], card);
+                //Set Player check int
+                int selectedPlayer = currentPlayer;
                 int tempPlayerNum= currentPlayer + 1;
                 if (tempPlayerNum < numOfPlayers){
                     currentPlayer = tempPlayerNum;}
@@ -139,15 +160,31 @@ public class STGame {
                 gameLayout.addHandPanel(getHumanPlayer());
                 gameLayout.ableHandButtons(false);
 
+
+
+                if (checkWin(players[selectedPlayer])==true){
+                    showWin(players[selectedPlayer], gameLayout);
+                }
+                else{
                 //Initate next round
-                playRound(gameLayout);
+                playRound(gameLayout);}
             }
         }
     }
 
+    public void showWin(STPlayer player, DefaultGameLayout gameLayout){
+        if (player.getID()==humanplayerID){
+            gameLayout.notifyUser("Human, you have won! Quit when you want");
+        }
+        else{
+            gameLayout.notifyUser("Player: " + player.getID() + " has won! Accept defeat gracefully.");
+        }
+
+    }
+
 
     public void playRound(DefaultGameLayout gameLayout){
-        if (checkResetPlayersSkip()) {
+        if (checkResetPlayersSkip()==true) {
             resetPlayedCard(getRandomCategory(), playedCard.getFileName());
             resetAllPlayerSkip();
         }
@@ -157,7 +194,9 @@ public class STGame {
             System.out.println(currentPlayer);
             //Check If human player
             if (players[currentPlayer].getID() == humanplayerID) {
+                //Human Path
                 if (checkValidHand() == true) {
+                    //Valid Hand
                     ActionListener task = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
@@ -175,9 +214,11 @@ public class STGame {
                         e.printStackTrace();
                     }
                 } else {
+                    //No valid hand
                     playHumanNoValidCards(gameLayout);
                 }
             } else {
+                //Bot path
                 gameLayout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
                 //Simulate player deciding
                 ActionListener task = new ActionListener() {
@@ -240,7 +281,7 @@ public class STGame {
                 noSkipCounter = noSkipCounter + 1;
             }
         }
-        if (noSkipCounter >= players.length - 1) {
+        if (noSkipCounter == players.length - 1) {
             answer = true;
         }
         return answer;
@@ -366,6 +407,7 @@ public class STGame {
 
 
         //Update currentPlayer
+        int selectedPlayer = currentPlayer;
         int tempPlayerNum= currentPlayer + 1;
         if (tempPlayerNum < numOfPlayers){
             currentPlayer = tempPlayerNum;}
@@ -375,8 +417,13 @@ public class STGame {
 
         //Update layout
         gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
-        //Play next round
-        playRound(gameLayout);
+
+        if (checkWin(players[selectedPlayer])==true){
+            showWin(players[selectedPlayer], gameLayout);
+        }
+        else{
+            //Initate next round
+            playRound(gameLayout);}
     }
 
 
