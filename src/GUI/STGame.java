@@ -10,10 +10,10 @@ import java.util.Scanner;
 /**
  * Created by Brit on 9/11/2016.
  */
-//Todo: Make player icons update with skip value
 //Todo: Winning conditions
 //Todo: Make it pretty
 //Todo: Fix bug; no valid cards to play but still asks for button input
+//Todo: Fix bug; no hand shown but 1 card in hand
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
@@ -75,7 +75,7 @@ public class STGame {
         String tempcategory=getRandomCategory();
         resetPlayedCard(tempcategory, "Slide66.jpg");
         //Update Layout
-        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg");
+        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg", players);
         gameLayout.addHandPanel(players[humanplayerID]);
         gameLayout.ableHandButtons(false);
     }
@@ -103,7 +103,7 @@ public class STGame {
 
                 //Update layout
                 gameLayout.ableAllComponents(true);
-                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
                 gameLayout.addHandPanel(getHumanPlayer());
                 gameLayout.ableHandButtons(false);
 
@@ -135,7 +135,7 @@ public class STGame {
 
                 //Update layout
                 gameLayout.ableAllComponents(true);
-                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
                 gameLayout.addHandPanel(getHumanPlayer());
                 gameLayout.ableHandButtons(false);
 
@@ -374,7 +374,7 @@ public class STGame {
         }
 
         //Update layout
-        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName());
+        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
         //Play next round
         playRound(gameLayout);
     }

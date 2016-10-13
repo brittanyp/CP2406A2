@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class DefaultGameLayout extends JPanel {
     JPanel handPanel = new JPanel();
+    JPanel iconPanel = new JPanel();
     JLabel lblPlayerValue;
     JLabel lblPlayer;
     JLabel lblCategory;
@@ -184,13 +185,15 @@ public class DefaultGameLayout extends JPanel {
         }
     }
 
-    public void updateLayout(String category, String value, int playerNum, String fileName){
+    public void updateLayout(String category, String value, int playerNum, String fileName, STPlayer[] playerArray){
         lblCategory.setText("Category: " + category);
         lblValue.setText("Value: " + value);
         lblhand.setText("Position: " + game.getHumanPlayer());
         String strPlayerNum = Integer.toString(playerNum +1);
         lblPlayerValue.setText(strPlayerNum);
         setPlayedCardImage(lblPlayedCardIcon, fileName);
+        lblDeckCount.setText("Deck: " +  (Integer.toString(game.getDeckSize())));
+        updatePlayerIcons(playerArray);
         upperFrame.repaint();
 
     }
@@ -275,16 +278,15 @@ public class DefaultGameLayout extends JPanel {
         return valuePanel;
     }
     public JPanel getPlayersIcons(int playernums){
-        JPanel playersIcons = new JPanel();
-        playersIcons.setLayout(new BoxLayout(playersIcons, BoxLayout.PAGE_AXIS));
+        iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.PAGE_AXIS));
         for (int i=0; i<playernums;i++){
             JLabel lblplayer = new JLabel("Player " + (i+1));
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\playerIcon.png").
                     getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));
             lblplayerIcons.setIcon(playerImage);
-            playersIcons.add(lblplayerIcons);
-            playersIcons.add(lblplayer);
+            iconPanel.add(lblplayerIcons);
+            iconPanel.add(lblplayer);
         }
         btnStart = new JButton("Start Game");
         add(btnStart);
@@ -296,7 +298,7 @@ public class DefaultGameLayout extends JPanel {
                 game.playRound(instanceOfLayout);
             }
         });
-        return playersIcons;
+        return iconPanel;
     }
 
     public JPanel getCardPanel(JLabel lbl1, JLabel lbl2){
@@ -313,6 +315,28 @@ public class DefaultGameLayout extends JPanel {
         deckPanel.add(lbl1);
         deckPanel.add(lbl2);
         return deckPanel;
+    }
+
+    public void updatePlayerIcons(STPlayer[] playerArray){
+        String imageFile;
+        iconPanel.removeAll();
+        for (int i=0; i<playerArray.length;i++){
+            if(playerArray[i].getPlayerSkip()){
+                imageFile = "playSkipIcon.gif";
+            }
+            else{
+                imageFile = "playerIcon.png";
+            }
+
+            JLabel lblplayer = new JLabel("Player " + (i+1));
+            JLabel lblplayerIcons = new JLabel();
+            ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\" + imageFile).
+                    getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));
+            lblplayerIcons.setIcon(playerImage);
+            iconPanel.add(lblplayerIcons);
+            iconPanel.add(lblplayer);
+        }
+
     }
 
 
