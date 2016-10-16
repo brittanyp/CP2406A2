@@ -193,7 +193,7 @@ public class DefaultGameLayout extends JPanel {
         lblPlayerValue.setText(strPlayerNum);
         setPlayedCardImage(lblPlayedCardIcon, fileName);
         lblDeckCount.setText("Deck: " +  (Integer.toString(game.getDeckSize())));
-        updatePlayerIcons(playerArray);
+        updatePlayerIcons(playerArray, playerNum);
         upperFrame.repaint();
 
     }
@@ -317,18 +317,22 @@ public class DefaultGameLayout extends JPanel {
         return deckPanel;
     }
 
-    public void updatePlayerIcons(STPlayer[] playerArray){
+    public void updatePlayerIcons(STPlayer[] playerArray, int currentPlayer){
         String imageFile;
         iconPanel.removeAll();
         for (int i=0; i<playerArray.length;i++){
-            if(playerArray[i].getPlayerSkip()){
-                imageFile = "playSkipIcon.gif";
+            if (playerArray[i].getID()==currentPlayer){
+                imageFile = "currentplayerIcon.png";
             }
-            else{
-                imageFile = "playerIcon.png";
+            else {
+                if (playerArray[i].getPlayerSkip()) {
+                    imageFile = "playSkipIcon.png";
+                } else {
+                    imageFile = "playerIcon.png";
+                }
             }
 
-            JLabel lblplayer = new JLabel("Player " + (i+1)+ " Deck Size: " + playerArray[i].getHand().size());
+            JLabel lblplayer = new JLabel("Player " + (i+1)+ ", Deck Size: " + playerArray[i].getHand().size());
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\" + imageFile).
                     getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));

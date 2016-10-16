@@ -12,8 +12,8 @@ import java.util.Scanner;
  */
 //Todo: Make it pretty
 //Todo: Add geologist card condition
-//Todo: No deck to pull card thingy
-//Todo: User doesnt update icons (PLACE UPDATE LAYOUT IN RESET SKIP CHECK
+//Todo: No deck to pull card thingy DONE
+//Todo: User doesnt update icons (PLACE UPDATE LAYOUT IN RESET SKIP CHECK) DONE
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
@@ -133,8 +133,14 @@ public class STGame {
             topFrame.dispose();
             STTrumpCard tcard = (STTrumpCard) card;
             if(tcard.getSubtitle().equals("Change to trumps category of your choice")){
-                System.out.println("AHHHHH");
-                //Special get user input I hate this card
+                //Freeze frame
+                layout.ableHandButtons(false);
+                layout.ableAllComponents(false);
+
+                //The Geologist Case
+                JFrame geologistMenuFrame = new geologistMenuFrame("ST - Geologist Choice", this);
+                geologistMenuFrame.setSize(400,200);
+
             }
             else{
                 resetPlayedCard(tcard.getSubtitle(), card.getFileName());
@@ -194,6 +200,8 @@ public class STGame {
             resetPlayedCard(getRandomCategory(), playedCard.getFileName());
             resetAllPlayerSkip();
         }
+
+        layout.updatePlayerIcons(players, currentPlayer);
 
         //Check if player is skipable
         if(players[currentPlayer].getPlayerSkip()==false) {
@@ -515,6 +523,25 @@ public class STGame {
                 break;
         }
         resetAllPlayerSkip();
+    }
+
+    public void playGeologist(String category){
+        resetPlayedCard(category, "Slide60.jpg");
+
+        int selectedPlayer = currentPlayer;
+        updatePlayer();
+
+        if (checkWin(players[selectedPlayer])==true){
+            showWin(players[selectedPlayer]);
+        }
+        else{
+            //Update layout
+            layout.ableAllComponents(true);
+            layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+            layout.addHandPanel(getHumanPlayer());
+            layout.ableHandButtons(false);
+            //Initate next round
+            playRound();}
     }
 
     public boolean compareCategory(STCard object, boolean setValue) {
