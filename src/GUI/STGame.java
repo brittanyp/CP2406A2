@@ -22,19 +22,17 @@ import java.util.Scanner;
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-
-    int WAITTIME = 3000;
     static final int NUM_OF_CARDS_TO_DEAL = 3;
     int numOfPlayers;
     STPlayer[] players;
     STDeck deck;
-    boolean gameIsOn = true;
     int humanplayerID;
     String playingCategory;
     String playingCategoryValue;
     STCard playedCard;
     int dealerID;
     int currentPlayer = 0;
+    DefaultGameLayout layout;
 
     public STGame(int numOfPlayers, STDeck deck) {
         this.numOfPlayers = numOfPlayers;
@@ -75,13 +73,14 @@ public class STGame {
 
     public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
         //Inital Start
+        layout=gameLayout;
         //Set random start category
         String tempcategory=getRandomCategory();
         resetPlayedCard(tempcategory, "Slide66.jpg");
         //Update Layout
-        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg", players);
-        gameLayout.addHandPanel(players[humanplayerID]);
-        gameLayout.ableHandButtons(false);
+        layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, "Slide66.jpg", players);
+        layout.addHandPanel(players[humanplayerID]);
+        layout.ableHandButtons(false);
     }
 
     public boolean checkWin(STPlayer player){
@@ -93,7 +92,7 @@ public class STGame {
         return win;
     }
 
-    public void confirmButtonAction(JFrame topFrame, DefaultGameLayout gameLayout,STCard card){
+    public void confirmButtonAction(JFrame topFrame, STCard card){
         //Human action
         if(card.getCard_type().equals("play")){
             boolean valid;
@@ -108,30 +107,25 @@ public class STGame {
                 //Remove card and Update currentPlayer
                 removeCardFromHand(players[currentPlayer], card);
                 int selectedPlayer = currentPlayer;
-                int tempPlayerNum= currentPlayer + 1;
-                if (tempPlayerNum <= numOfPlayers){
-                    currentPlayer = tempPlayerNum;}
-                else{
-                    currentPlayer = 0;
-                }
+                updatePlayer();
 
                 //Update layout
-                gameLayout.ableAllComponents(true);
-                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
-                gameLayout.addHandPanel(getHumanPlayer());
-                gameLayout.ableHandButtons(false);
+                layout.ableAllComponents(true);
+                layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+                layout.addHandPanel(getHumanPlayer());
+                layout.ableHandButtons(false);
 
                 if (checkWin(players[selectedPlayer])==true){
-                    showWin(players[selectedPlayer], gameLayout);
+                    showWin(players[selectedPlayer]);
                 }
                 else{
                     //Initate next round
-                    playRound(gameLayout);}
+                    playRound();}
             }
             else{
                 topFrame.dispose();
-                gameLayout.ableAllComponents(true);
-                gameLayout.notifyUser("!! Invalid Card Selection: "+ card.toString() + " !!");
+                layout.ableAllComponents(true);
+                layout.notifyUser("!! Invalid Card Selection: "+ card.toString() + " !!");
             }
         }
         else{
@@ -147,43 +141,47 @@ public class STGame {
                 removeCardFromHand(players[currentPlayer], card);
                 //Set Player check int
                 int selectedPlayer = currentPlayer;
-                int tempPlayerNum= currentPlayer + 1;
-                if (tempPlayerNum < numOfPlayers){
-                    currentPlayer = tempPlayerNum;}
-                else{
-                    currentPlayer = 0;
-                }
+                updatePlayer();
 
                 //Update layout
-                gameLayout.ableAllComponents(true);
-                gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
-                gameLayout.addHandPanel(getHumanPlayer());
-                gameLayout.ableHandButtons(false);
-
-
+                layout.ableAllComponents(true);
+                layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+                layout.addHandPanel(getHumanPlayer());
+                layout.ableHandButtons(false);
 
                 if (checkWin(players[selectedPlayer])==true){
-                    showWin(players[selectedPlayer], gameLayout);
+                    showWin(players[selectedPlayer]);
                 }
                 else{
                 //Initate next round
-                playRound(gameLayout);}
+                playRound();}
             }
         }
     }
 
-    public void showWin(STPlayer player, DefaultGameLayout gameLayout){
+    public void showWin(STPlayer player){
         if (player.getID()==humanplayerID){
-            gameLayout.notifyUser("Human, you have won! Quit when you want");
+            layout.notifyUser("Human, you have won! Quit when you want");
         }
         else{
-            gameLayout.notifyUser("Player: " + player.getID() + " has won! Accept defeat gracefully.");
+            layout.notifyUser("Player: " + player.getID() + " has won! Accept defeat gracefully.");
         }
+    }
 
+    private void updatePlayer(){
+        int tempPlayerNum= currentPlayer + 1;
+        if (tempPlayerNum < numOfPlayers){
+            currentPlayer = tempPlayerNum;}
+        else{
+            currentPlayer = 0;
+        }
     }
 
 
-    public void playRound(DefaultGameLayout gameLayout){
+    public void playRound(){
+        pauseGame();
+
+        //Check if One Player is left without skip true
         if (checkResetPlayersSkip()==true) {
             resetPlayedCard(getRandomCategory(), playedCard.getFileName());
             resetAllPlayerSkip();
@@ -197,78 +195,46 @@ public class STGame {
                 //Human Path
                 if (checkValidHand() == true) {
                     //Valid Hand
-                    ActionListener task = new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            gameLayout.notifyUser("It is your turn to play a card");
-                            gameLayout.ableHandButtons(true);
-                        }
-                    };
-                    Timer timer = new Timer(100, task);
-                    timer.setRepeats(false);
-                    timer.start();
+                    pauseGame();
+                    layout.notifyUser("It is your turn to play a card");
+                    layout.ableHandButtons(true);
 
-                    try {
-                        Thread.sleep(WAITTIME);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 } else {
                     //No valid hand
-                    playHumanNoValidCards(gameLayout);
+                    playHumanNoValidCards();
                 }
             } else {
                 //Bot path
-                gameLayout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
+                layout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
                 //Simulate player deciding
-                ActionListener task = new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        playBotTurn(gameLayout);
-                    }
-                };
-                Timer timer = new Timer(100, task);
-                timer.setRepeats(false);
-                timer.start();
-
-                try {
-                    Thread.sleep(WAITTIME);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                pauseGame();
+                playBotTurn();
             }
         }
         else{
             if(currentPlayer == humanplayerID) {
-                gameLayout.notifyUser("You are still skipped!");
+                layout.notifyUser("You are still skipped!");
             }
             else{
-                gameLayout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
+                layout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
             }
-
-            ActionListener task = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int tempPlayerNum= currentPlayer + 1;
-                    if (tempPlayerNum <= numOfPlayers){
-                        currentPlayer = tempPlayerNum;}
-                    else{
-                        currentPlayer = 0;
-                    }
-                    playRound(gameLayout);
-                }
-            };
-            Timer timer = new Timer(100, task);
-            timer.setRepeats(false);
-            timer.start();
-
-            try {
-                Thread.sleep(WAITTIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            pauseGame();
+            updatePlayer();
+            playRound();
         }
 
+    }
+    private void pauseGame() {
+        System.out.println("PAUSE");
+        ActionListener task = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        };
+        Timer timer = new Timer(5000, task);
+        timer.setRepeats(false);
+        timer.start();
     }
 
     private boolean checkResetPlayersSkip() {
@@ -312,36 +278,18 @@ public class STGame {
         return result;
     }
 
-    private void playHumanNoValidCards(DefaultGameLayout gameLayout){
+    private void playHumanNoValidCards(){
         System.out.println("No valid cards human");
-        gameLayout.notifyUser("Oh no! You have no valid cards in your hand. You will be skipped " +
+        layout.notifyUser("Oh no! You have no valid cards in your hand. You will be skipped " +
                 "until a trump card is played");
-        ActionListener task = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                players[currentPlayer].setPlayerSkip(true);
-                dealSingleCardToPlayer(players[currentPlayer].getHand());
-                int tempPlayerNum= currentPlayer + 1;
-                if (tempPlayerNum <= numOfPlayers){
-                    currentPlayer = tempPlayerNum;}
-                else{
-                    currentPlayer = 0;
-                }
-                playRound(gameLayout);
-            }
-        };
-        Timer timer = new Timer(100, task);
-        timer.setRepeats(false);
-        timer.start();
-
-        try {
-            Thread.sleep(WAITTIME+1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        pauseGame();
+        players[currentPlayer].setPlayerSkip(true);
+        dealSingleCardToPlayer(players[currentPlayer].getHand());
+        updatePlayer();
+        playRound();
     }
 
-    private void playBotTurn(DefaultGameLayout gameLayout){
+    private void playBotTurn(){
         //Define Hand
         Object hand = players[currentPlayer].getHand();
         ArrayList<STCard> tHand = (ArrayList<STCard>) hand;
@@ -393,7 +341,7 @@ public class STGame {
                     removeCardFromHand(players[currentPlayer], selectedCard);
                 }
             }
-            gameLayout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
+            layout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
         }
         else{
             //No valid Cards
@@ -402,28 +350,23 @@ public class STGame {
             dealSingleCardToPlayer(players[currentPlayer].getHand());
 
             System.out.println("No valid cards");
-            gameLayout.notifyUser("Player " + (currentPlayer + 1) + " has no valid cards to play and will be skipped");
+            layout.notifyUser("Player " + (currentPlayer + 1) + " has no valid cards to play and will be skipped");
         }
 
 
         //Update currentPlayer
         int selectedPlayer = currentPlayer;
-        int tempPlayerNum= currentPlayer + 1;
-        if (tempPlayerNum < numOfPlayers){
-            currentPlayer = tempPlayerNum;}
-        else{
-            currentPlayer = 0;
-        }
+        updatePlayer();
 
         //Update layout
-        gameLayout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+        layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
 
         if (checkWin(players[selectedPlayer])==true){
-            showWin(players[selectedPlayer], gameLayout);
+            showWin(players[selectedPlayer]);
         }
         else{
             //Initate next round
-            playRound(gameLayout);}
+            playRound();}
     }
 
 

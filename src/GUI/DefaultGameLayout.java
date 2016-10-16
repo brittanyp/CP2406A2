@@ -295,7 +295,7 @@ public class DefaultGameLayout extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 btnStart.setVisible(false);
                 game.initiateGame(upperFrame, instanceOfLayout);
-                game.playRound(instanceOfLayout);
+                game.playRound();
             }
         });
         return iconPanel;

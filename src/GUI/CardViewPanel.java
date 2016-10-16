@@ -27,7 +27,7 @@ public class CardViewPanel extends JPanel {
         btnConfirmCard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                game.confirmButtonAction(topFrame, gameLayout, card);
+                game.confirmButtonAction(topFrame, card);
             }
         });
     }
