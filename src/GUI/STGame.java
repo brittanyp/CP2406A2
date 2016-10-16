@@ -10,19 +10,16 @@ import java.util.Scanner;
 /**
  * Created by Brit on 9/11/2016.
  */
-//Todo: Winning conditions
 //Todo: Make it pretty
-//Todo: Fix bug; no valid cards to play but still asks for button input
-//Todo: Fix bug; no hand shown but 1 card in hand
 //Todo: Add geologist card condition
 //Todo: No deck to pull card thingy
-//Todo: User doesnt update icons
-//Todo: card adds to wrong player?
+//Todo: User doesnt update icons (PLACE UPDATE LAYOUT IN RESET SKIP CHECK
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
     static final int NUM_OF_CARDS_TO_DEAL = 3;
+    int WAITTIME = 2000;
     int numOfPlayers;
     STPlayer[] players;
     STDeck deck;
@@ -68,7 +65,9 @@ public class STGame {
         if (deck.getDeckSize() != 0) {
             STCard card = deck.getRandomSingleCard();
             hand.add(card);
+            System.out.println(card.getTitle() + " Added to Hand");
         }
+
     }
 
     public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
@@ -109,16 +108,18 @@ public class STGame {
                 int selectedPlayer = currentPlayer;
                 updatePlayer();
 
-                //Update layout
-                layout.ableAllComponents(true);
-                layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
-                layout.addHandPanel(getHumanPlayer());
-                layout.ableHandButtons(false);
+
 
                 if (checkWin(players[selectedPlayer])==true){
                     showWin(players[selectedPlayer]);
                 }
                 else{
+                    //Update layout
+                    //Here
+                    layout.ableAllComponents(true);
+                    layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+                    layout.addHandPanel(getHumanPlayer());
+                    layout.ableHandButtons(false);
                     //Initate next round
                     playRound();}
             }
@@ -160,6 +161,12 @@ public class STGame {
     }
 
     public void showWin(STPlayer player){
+        //Update layout
+        layout.ableAllComponents(true);
+        layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+        layout.addHandPanel(getHumanPlayer());
+        layout.ableHandButtons(false);
+
         if (player.getID()==humanplayerID){
             layout.notifyUser("Human, you have won! Quit when you want");
         }
@@ -179,7 +186,8 @@ public class STGame {
 
 
     public void playRound(){
-        pauseGame();
+
+        layout.ableHandButtons(false);
 
         //Check if One Player is left without skip true
         if (checkResetPlayersSkip()==true) {
@@ -189,15 +197,31 @@ public class STGame {
 
         //Check if player is skipable
         if(players[currentPlayer].getPlayerSkip()==false) {
-            System.out.println(currentPlayer);
+            System.out.println("Player Turn: " + (currentPlayer +1));
             //Check If human player
             if (players[currentPlayer].getID() == humanplayerID) {
                 //Human Path
                 if (checkValidHand() == true) {
                     //Valid Hand
-                    pauseGame();
-                    layout.notifyUser("It is your turn to play a card");
-                    layout.ableHandButtons(true);
+                    //Pause Game
+                    ActionListener task = new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            System.out.println("PAUSE");
+                            layout.notifyUser("It is your turn to play a card");
+                            layout.ableHandButtons(true);
+                        }
+                    };
+                    Timer timer = new Timer(5000, task);
+                    timer.setRepeats(false);
+                    timer.start();
+
+                    try {
+                        Thread.sleep(WAITTIME);
+                    } catch (InterruptedException ie) {
+                        ie.printStackTrace();
+                    }
+
 
                 } else {
                     //No valid hand
@@ -207,8 +231,24 @@ public class STGame {
                 //Bot path
                 layout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
                 //Simulate player deciding
-                pauseGame();
-                playBotTurn();
+                //Pause Game
+                ActionListener task = new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("PAUSE");
+                        playBotTurn();
+                    }
+                };
+                Timer timer = new Timer(5000, task);
+                timer.setRepeats(false);
+                timer.start();
+
+                try {
+                    Thread.sleep(WAITTIME);
+                } catch (InterruptedException ie) {
+                    ie.printStackTrace();
+                }
+
             }
         }
         else{
@@ -218,23 +258,27 @@ public class STGame {
             else{
                 layout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
             }
-            pauseGame();
-            updatePlayer();
-            playRound();
+            //Pause Game
+            ActionListener task = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("PAUSE");
+                    updatePlayer();
+                    playRound();
+                }
+            };
+            Timer timer = new Timer(5000, task);
+            timer.setRepeats(false);
+            timer.start();
+
+            try {
+                Thread.sleep(WAITTIME);
+            } catch (InterruptedException ie) {
+                ie.printStackTrace();
+            }
+
         }
 
-    }
-    private void pauseGame() {
-        System.out.println("PAUSE");
-        ActionListener task = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        };
-        Timer timer = new Timer(5000, task);
-        timer.setRepeats(false);
-        timer.start();
     }
 
     private boolean checkResetPlayersSkip() {
@@ -282,11 +326,32 @@ public class STGame {
         System.out.println("No valid cards human");
         layout.notifyUser("Oh no! You have no valid cards in your hand. You will be skipped " +
                 "until a trump card is played");
-        pauseGame();
-        players[currentPlayer].setPlayerSkip(true);
-        dealSingleCardToPlayer(players[currentPlayer].getHand());
-        updatePlayer();
-        playRound();
+        ActionListener task = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("PAUSE");
+                players[currentPlayer].setPlayerSkip(true);
+                dealSingleCardToPlayer(players[currentPlayer].getHand());
+
+                updatePlayer();
+                layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
+                layout.addHandPanel(getHumanPlayer());
+                layout.ableHandButtons(false);
+
+                playRound();
+            }
+        };
+        Timer timer = new Timer(5000, task);
+        timer.setRepeats(false);
+        timer.start();
+
+
+        try {
+            Thread.sleep(WAITTIME);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
+        }
+
     }
 
     private void playBotTurn(){
@@ -361,12 +426,30 @@ public class STGame {
         //Update layout
         layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.getFileName(), players);
 
-        if (checkWin(players[selectedPlayer])==true){
-            showWin(players[selectedPlayer]);
+        //Pause Game
+        ActionListener task = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("PAUSE");
+                if (checkWin(players[selectedPlayer])==true){
+                    showWin(players[selectedPlayer]);
+                }
+                else{
+                    //Initate next round
+                    playRound();}
+            }
+        };
+        Timer timer = new Timer(5000, task);
+        timer.setRepeats(false);
+        timer.start();
+
+        try {
+            Thread.sleep(WAITTIME);
+        } catch (InterruptedException ie) {
+            ie.printStackTrace();
         }
-        else{
-            //Initate next round
-            playRound();}
+
+
     }
 
 
