@@ -11,6 +11,8 @@ import java.util.Scanner;
  * Created by Brit on 9/11/2016.
  */
 //Todo: Make it pretty
+    //Todo: Remove bug testing and prints
+    //Todo: check handpanel only able when wanted
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
@@ -92,7 +94,8 @@ public class STGame {
 
     public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
         //Bug test
-        //dealMagAndGeop(players[1]);
+        //dealMagAndGeop(players[0]);
+        //dealGEOLOGIST(players[0]);
 
         //Inital Start
         layout=gameLayout;
@@ -126,7 +129,7 @@ public class STGame {
                 }
             }
             if (magnetiteInHand==true && geophysicistInHand==true){
-                winCondition = "both the magnetite and geophysicist cards";
+                winCondition = "both the magnetite and geophysicist cards\n";
                 win = true;
             }
         }
@@ -219,7 +222,7 @@ public class STGame {
 
         if (player.getID()==humanplayerID){
             layout.notifyUser("You have " + winCondition +
-                    ", you have won! Quit when you want");
+                    "\n you have won! Quit when you want");
         }
         else{
             layout.notifyUser("Player: " + (player.getID() + 1)+ " has " + winCondition + " they have won! Accept defeat gracefully.");
@@ -380,7 +383,7 @@ public class STGame {
 
     private void playHumanNoValidCards(){
         System.out.println("No valid cards human");
-        layout.notifyUser("Oh no! You have no valid cards in your hand. You will be skipped " +
+        layout.notifyUser("Oh no! You have no valid cards in your hand.\nYou will be skipped " +
                 "until a trump card is played");
         ActionListener task = new ActionListener() {
             @Override

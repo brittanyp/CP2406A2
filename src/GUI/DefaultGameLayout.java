@@ -12,64 +12,69 @@ import java.util.ArrayList;
  * Created by Brit on 10/9/2016.
  */
 public class DefaultGameLayout extends JPanel {
+    //Panels
     JPanel handPanel = new JPanel();
     JPanel iconPanel = new JPanel();
-    JLabel lblPlayerValue;
-    JLabel lblPlayer;
     JLabel lblCategory;
     JLabel lblValue;
-
-    JLabel lblGuide;
+    JTextArea lblGuide;
     JLabel lblPlayedCardIcon;
     JLabel lblDeckCount;
-
     JLabel lblhand;
-
+    //Buttons
     JButton btnQuit;
     JButton btnStart;
 
-    STGame game;
-    JFrame upperFrame;
+    //Constants
+    STGame GAME;
+    JFrame UPPERFRAME;
     DefaultGameLayout instanceOfLayout = this;
-    public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame passedgame){
+    public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame passedGame){
 
-        upperFrame = topFrame;
-        game = passedgame;
-        int decksize = game.getDeckSize();
+        UPPERFRAME = topFrame;
+        GAME = passedGame;
+        int deckSize = GAME.getDeckSize();
 
         //Create Panel
         Dimension size = getPreferredSize();
-        size.height = 950;
-        size.width = 1300;
+        size.height = 800;
+        size.width = 950;
         setPreferredSize(size);
 
+        //Create Fonts
+        Font sensibleFont = new Font("Times New Roman", Font.BOLD, 15);
+        Font guideFont = new Font("Courier New", Font.BOLD, 15);
+
         //Create J objects
-        lblPlayer = new JLabel("Player: ");
-        lblPlayerValue = new JLabel("0");
         lblCategory = new JLabel("Category: ");
+        lblCategory.setFont(sensibleFont);
+
         lblValue = new JLabel("Value: ");
+        lblValue.setFont(sensibleFont);
 
         btnQuit = new JButton("Quit");
-        lblGuide = new JLabel("Welcome");
+        btnQuit.setPreferredSize(new Dimension(100, 50));
+
+        lblGuide = new JTextArea("Welcome");
+        lblGuide.setMaximumSize(new Dimension(250,70));
+
+        lblGuide.setFont(guideFont);
 
         //PlayedCard Panel
         JLabel lblPlayedCard = new JLabel("Played Card");
         lblPlayedCardIcon = new JLabel();
         setPlayedCardImage(lblPlayedCardIcon, "Slide66.jpg");
 
-
         //Deck Panel
-        lblDeckCount = new JLabel("Deck: " + decksize);
+        lblDeckCount = new JLabel("Deck: " + deckSize);
         JLabel lblDeckIcon = new JLabel();
         ImageIcon DeckCardImage = new ImageIcon(new ImageIcon("images\\Slide66.jpg").
                 getImage().getScaledInstance(240,336, Image.SCALE_DEFAULT));
         lblDeckIcon.setIcon(DeckCardImage);
 
         //Hand Panel
-        lblhand = new JLabel("Position: " + game.getHumanPlayer());
+        lblhand = new JLabel("Position: " + GAME.getHumanPlayer());
 
-
-        //Create button functions
         //Quit button Pressed
         btnQuit.addActionListener(new ActionListener() {
             @Override
@@ -86,26 +91,23 @@ public class DefaultGameLayout extends JPanel {
         defaultLayout.weighty = 0.5;
 
         //Row 0, Column 0
+        //Value Display
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 0;
         defaultLayout.gridy = 0;
         defaultLayout.anchor = GridBagConstraints.FIRST_LINE_START;
         add(getValuesPanel(lblCategory, lblValue), defaultLayout);
 
-        //Row 0, Column 1
+        //Row 0, Column 2
+        //Guide Message
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 0;
-        defaultLayout.anchor = GridBagConstraints.FIRST_LINE_START;
+        defaultLayout.anchor = GridBagConstraints.NORTH;
         add(lblGuide, defaultLayout);
 
-        //Row 0, Column 2
-        defaultLayout.weighty = 4;
-        defaultLayout.gridx = 2;
-        defaultLayout.gridy = 0;
-        add(getPlayer(lblPlayer, lblPlayerValue), defaultLayout);
-
         //Row 1, Column 0
+        //Player Icons
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 0;
         defaultLayout.gridy = 1;
@@ -113,6 +115,7 @@ public class DefaultGameLayout extends JPanel {
         add(getPlayersIcons(numOfPlayers), defaultLayout);
 
         //Row 1, Column 1
+        //Played Card View
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 1;
@@ -121,22 +124,16 @@ public class DefaultGameLayout extends JPanel {
 
 
         //Row 1, Column 2
+        //Deck View
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 2;
         defaultLayout.gridy = 1;
-        defaultLayout.anchor = GridBagConstraints.CENTER;
+        defaultLayout.anchor = GridBagConstraints.WEST;
         add(getDeckPanel(lblDeckCount, lblDeckIcon), defaultLayout);
 
 
-
-        //Row 2, Column 0
-        defaultLayout.weighty = 4;
-        defaultLayout.gridx = 0;
-        defaultLayout.gridy = 2;
-        defaultLayout.anchor = GridBagConstraints.CENTER;
-        add(lblhand, defaultLayout);
-
         //Row 2, Column 1
+        //Player Hand View
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 1;
         defaultLayout.gridy = 2;
@@ -145,10 +142,11 @@ public class DefaultGameLayout extends JPanel {
         add(handPanel, defaultLayout);
 
         //Row 2, Column 2
+        //Quit Btn
         defaultLayout.weighty = 4;
         defaultLayout.gridx = 2;
         defaultLayout.gridy = 2;
-        defaultLayout.anchor = GridBagConstraints.EAST;
+        defaultLayout.anchor = GridBagConstraints.CENTER;
         add(btnQuit, defaultLayout);
 
     }
@@ -188,16 +186,12 @@ public class DefaultGameLayout extends JPanel {
     public void updateLayout(String category, String value, int playerNum, String fileName, STPlayer[] playerArray){
         lblCategory.setText("Category: " + category);
         lblValue.setText("Value: " + value);
-        lblhand.setText("Position: " + game.getHumanPlayer());
-        String strPlayerNum = Integer.toString(playerNum +1);
-        lblPlayerValue.setText(strPlayerNum);
+        lblhand.setText("Position: " + GAME.getHumanPlayer());
         setPlayedCardImage(lblPlayedCardIcon, fileName);
-        lblDeckCount.setText("Deck: " +  (Integer.toString(game.getDeckSize())));
+        lblDeckCount.setText("Deck: " +  (Integer.toString(GAME.getDeckSize())));
         updatePlayerIcons(playerArray, playerNum);
-        upperFrame.repaint();
-
+        UPPERFRAME.repaint();
     }
-
 
     public void showCard(STCard card){
         this.setEnabled(false);
@@ -208,7 +202,7 @@ public class DefaultGameLayout extends JPanel {
         cardViewFrame.setVisible(true);
         cardViewFrame.setTitle("ST - View Card");
         Container mainPane = cardViewFrame.getContentPane();
-        CardViewPanel cardPanel = new CardViewPanel(cardViewFrame, card, game, this);
+        CardViewPanel cardPanel = new CardViewPanel(cardViewFrame, card, GAME, this);
         mainPane.add(cardPanel, BorderLayout.NORTH);
         cardViewFrame.pack();
         cardViewFrame.addWindowListener(new WindowListener() {
@@ -278,24 +272,28 @@ public class DefaultGameLayout extends JPanel {
         return valuePanel;
     }
     public JPanel getPlayersIcons(int playernums){
+        Font playerFont = new Font("Times New Roman", Font.PLAIN, 10);
         iconPanel.setLayout(new BoxLayout(iconPanel, BoxLayout.PAGE_AXIS));
+
         for (int i=0; i<playernums;i++){
             JLabel lblplayer = new JLabel("Player " + (i+1));
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\playerIcon.png").
-                    getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));
+                    getImage().getScaledInstance(50,50, Image.SCALE_DEFAULT));
             lblplayerIcons.setIcon(playerImage);
+            lblplayer.setFont(playerFont);
             iconPanel.add(lblplayerIcons);
             iconPanel.add(lblplayer);
         }
         btnStart = new JButton("Start Game");
+        btnStart.setPreferredSize(new Dimension(100,50));
         add(btnStart);
         btnStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnStart.setVisible(false);
-                game.initiateGame(upperFrame, instanceOfLayout);
-                game.playRound();
+                GAME.initiateGame(UPPERFRAME, instanceOfLayout);
+                GAME.playRound();
             }
         });
         return iconPanel;
@@ -321,6 +319,7 @@ public class DefaultGameLayout extends JPanel {
         String imageFile;
         iconPanel.removeAll();
         JLabel lblplayer;
+        Font playerFont = new Font("Times New Roman", Font.PLAIN, 10);
 
         for (int i=0; i<playerArray.length;i++){
             if (playerArray[i].getID()==currentPlayer){
@@ -333,7 +332,7 @@ public class DefaultGameLayout extends JPanel {
                     imageFile = "playerIcon.png";
                 }
             }
-            if (playerArray[i].getID()==game.getHumanPlayer().getID()){
+            if (playerArray[i].getID()== GAME.getHumanPlayer().getID()){
                lblplayer = new JLabel("You");
             }
             else {
@@ -341,8 +340,9 @@ public class DefaultGameLayout extends JPanel {
             }
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\" + imageFile).
-                    getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+                    getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
             lblplayerIcons.setIcon(playerImage);
+            lblplayer.setFont(playerFont);
             iconPanel.add(lblplayerIcons);
             iconPanel.add(lblplayer);
 
