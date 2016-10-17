@@ -16,6 +16,7 @@ public class NumberFrame extends JFrame {
         setSize(1000, 850);
         setLocationRelativeTo(null);
         setVisible(true);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST - Number of Players");
 

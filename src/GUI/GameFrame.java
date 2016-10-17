@@ -17,6 +17,7 @@ public class GameFrame extends JFrame {
         //Define
         setSize(1300, 950);
         setLocationRelativeTo(null);
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST - Game");

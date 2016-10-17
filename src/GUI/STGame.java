@@ -11,14 +11,13 @@ import java.util.Scanner;
  * Created by Brit on 9/11/2016.
  */
 //Todo: Make it pretty
-//Todo: Add geologist card condition
-//Todo: No deck to pull card thingy DONE
-//Todo: User doesnt update icons (PLACE UPDATE LAYOUT IN RESET SKIP CHECK) DONE
+//Todo: add magnite and geophysis winning condition
+//Todo: Add geologist card condition (Add button functions for categories)
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-    static final int NUM_OF_CARDS_TO_DEAL = 3;
+    static final int NUM_OF_CARDS_TO_DEAL = 8;
     int WAITTIME = 2000;
     int numOfPlayers;
     STPlayer[] players;
@@ -46,6 +45,15 @@ public class STGame {
             ArrayList<Object> hand = deck.dealCards(NUM_OF_CARDS_TO_DEAL);
             player.setHand(hand);
         }
+    }
+
+    public void dealGEOLOGIST(STPlayer humanPlayer){
+        //For bug testing
+        STTrumpCard geoCard = new STTrumpCard(105,"Slide60.jpg", "Slide60", "trump", "The Geologist", "Change to trumps category of your choice");
+
+        Object hand = humanPlayer.getHand();
+        ArrayList<STCard> thand = (ArrayList <STCard>) hand;
+        thand.add(geoCard);
     }
 
     public void removeCardFromHand(STPlayer player, STCard card){
@@ -138,8 +146,9 @@ public class STGame {
                 layout.ableAllComponents(false);
 
                 //The Geologist Case
-                JFrame geologistMenuFrame = new geologistMenuFrame("ST - Geologist Choice", this);
+                JFrame geologistMenuFrame = new geologistMenuFrame("ST - Geologist Choice", this, card);
                 geologistMenuFrame.setSize(400,200);
+
 
             }
             else{
@@ -190,7 +199,6 @@ public class STGame {
         }
     }
 
-
     public void playRound(){
 
         layout.ableHandButtons(false);
@@ -199,6 +207,7 @@ public class STGame {
         if (checkResetPlayersSkip()==true) {
             resetPlayedCard(getRandomCategory(), playedCard.getFileName());
             resetAllPlayerSkip();
+            layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.fileName, players);
         }
 
         layout.updatePlayerIcons(players, currentPlayer);
@@ -405,7 +414,8 @@ public class STGame {
             else{
                 STTrumpCard tcard = (STTrumpCard) selectedCard;
                 if(tcard.getSubtitle().equals("Change to trumps category of your choice")){
-                    //Special get user input I hate this card
+                    String geoSelection = getRandomCategory();
+                    playGeologist(geoSelection, tcard);
                 }
                 else{
                     //Trump Cards
@@ -525,8 +535,9 @@ public class STGame {
         resetAllPlayerSkip();
     }
 
-    public void playGeologist(String category){
+    public void playGeologist(String category, STCard geoCard){
         resetPlayedCard(category, "Slide60.jpg");
+        removeCardFromHand(players[currentPlayer], geoCard);
 
         int selectedPlayer = currentPlayer;
         updatePlayer();
@@ -801,7 +812,7 @@ public class STGame {
         int playerPostion = new Random().nextInt(players.length);
         humanplayerID = playerPostion;
         //Todo: remove this, testing code
-        humanplayerID = 1;
+        //humanplayerID = 1;
     }
 
     public STPlayer getHumanPlayer() {

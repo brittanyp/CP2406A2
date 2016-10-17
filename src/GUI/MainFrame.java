@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
         //Define
         setSize(500, 300);
         setLocationRelativeTo(null);
-
+        setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST Welcome");

@@ -9,23 +9,26 @@ import java.awt.event.ActionListener;
  * Created by Brit on 10/16/2016.
  */
 
-public class geologistMenuFrame extends JFrame{
+public class geologistMenuFrame extends JFrame implements ActionListener{
     JButton btnHardness;
     JButton btnSpecificGravity;
     JButton btnCleavage;
     JButton btnCrustalAbundance;
     JButton btnEconomicValue;
+    STGame currentGame;
+    STCard currentCard;
 
-
-    public geologistMenuFrame(String title, STGame game)
+    public geologistMenuFrame(String title, STGame game, STCard card)
             //DefaultGameLayout gameLayout
     {
         super(title);
+        currentGame = game;
+        currentCard = card;
         //Define
         setSize(700, 700);
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setTitle("ST - Geologist Choice");
 
         JPanel geoMenuLayout = new JPanel();
@@ -47,17 +50,37 @@ public class geologistMenuFrame extends JFrame{
         geoMenuLayout.add(btnCrustalAbundance);
         geoMenuLayout.add(btnEconomicValue);
 
+        btnHardness.addActionListener(this);
+        btnSpecificGravity.addActionListener(this);
+        btnCleavage.addActionListener(this);
+        btnCrustalAbundance.addActionListener(this);
+        btnEconomicValue.addActionListener(this);
+
         Container mainPane = getContentPane();
         mainPane.add(geoMenuLayout, BorderLayout.NORTH);
         pack();
 
-        btnHardness.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                game.playGeologist("hardness");
-                //resetcard with hardness
-            }
-        });
-
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String category;
+        if(e.getSource()==btnHardness){
+            category = "hardness";
+        }
+        else if(e.getSource()==btnSpecificGravity){
+            category = "specific gravity";
+        }
+        else if(e.getSource()==btnCleavage){
+            category = "cleavage";
+        }
+        else if(e.getSource()==btnCrustalAbundance){
+            category = "crustal abundance";
+        }
+        else{
+            category = "economic value";
+        }
+        dispose();
+        currentGame.playGeologist(category, currentCard);
+        //resetcard with hardness
     }
 }

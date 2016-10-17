@@ -332,7 +332,7 @@ public class DefaultGameLayout extends JPanel {
                 }
             }
 
-            JLabel lblplayer = new JLabel("Player " + (i+1)+ ", Deck Size: " + playerArray[i].getHand().size());
+            JLabel lblplayer = new JLabel("Player " + (i+1)+ ", Hand Size: " + playerArray[i].getHand().size());
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\" + imageFile).
                     getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));
