@@ -320,6 +320,8 @@ public class DefaultGameLayout extends JPanel {
     public void updatePlayerIcons(STPlayer[] playerArray, int currentPlayer){
         String imageFile;
         iconPanel.removeAll();
+        JLabel lblplayer;
+
         for (int i=0; i<playerArray.length;i++){
             if (playerArray[i].getID()==currentPlayer){
                 imageFile = "currentplayerIcon.png";
@@ -331,14 +333,19 @@ public class DefaultGameLayout extends JPanel {
                     imageFile = "playerIcon.png";
                 }
             }
-
-            JLabel lblplayer = new JLabel("Player " + (i+1)+ ", Hand Size: " + playerArray[i].getHand().size());
+            if (playerArray[i].getID()==game.getHumanPlayer().getID()){
+               lblplayer = new JLabel("You");
+            }
+            else {
+                lblplayer = new JLabel("Player " + (i + 1) + ", Hand Size: " + playerArray[i].getHand().size());
+            }
             JLabel lblplayerIcons = new JLabel();
             ImageIcon playerImage = new ImageIcon(new ImageIcon("images\\" + imageFile).
-                    getImage().getScaledInstance(30,30, Image.SCALE_DEFAULT));
+                    getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
             lblplayerIcons.setIcon(playerImage);
             iconPanel.add(lblplayerIcons);
             iconPanel.add(lblplayer);
+
         }
 
     }

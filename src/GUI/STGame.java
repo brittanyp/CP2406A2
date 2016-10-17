@@ -11,13 +11,12 @@ import java.util.Scanner;
  * Created by Brit on 9/11/2016.
  */
 //Todo: Make it pretty
-//Todo: add magnite and geophysis winning condition
-//Todo: Add geologist card condition (Add button functions for categories)
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
     static final int NUM_OF_CARDS_TO_DEAL = 8;
+    String winCondition;
     int WAITTIME = 2000;
     int numOfPlayers;
     STPlayer[] players;
@@ -47,14 +46,27 @@ public class STGame {
         }
     }
 
-    public void dealGEOLOGIST(STPlayer humanPlayer){
+    public void dealGEOLOGIST(STPlayer player){
         //For bug testing
         STTrumpCard geoCard = new STTrumpCard(105,"Slide60.jpg", "Slide60", "trump", "The Geologist", "Change to trumps category of your choice");
-
-        Object hand = humanPlayer.getHand();
+        Object hand = player.getHand();
         ArrayList<STCard> thand = (ArrayList <STCard>) hand;
         thand.add(geoCard);
     }
+
+    public void dealMagAndGeop(STPlayer player){
+        //For bug testing
+        ArrayList<String> magArray = new ArrayList<String>();
+        magArray.add("No one cards");
+        STPlayCard magCard = new STPlayCard(106, "Slide46.jpg", "Slide46", "play", "Magnetite", "Fe_3 O_4",
+                "oxide (spinel)", "isometric", magArray, "5.5 - 6", "5.2", "none", "moderate", "very high" );
+        STTrumpCard geopCard = new STTrumpCard(107, "Slide59.jpg", "Slide59", "trump", "The Geophysicist", "Specific gravity");
+        Object hand = player.getHand();
+        ArrayList<STCard> thand = (ArrayList<STCard>) hand;
+        thand.add(magCard);
+        thand.add(geopCard);
+    }
+
 
     public void removeCardFromHand(STPlayer player, STCard card){
         ArrayList<Object> hand = player.getHand();
@@ -79,6 +91,9 @@ public class STGame {
     }
 
     public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
+        //Bug test
+        //dealMagAndGeop(players[1]);
+
         //Inital Start
         layout=gameLayout;
         //Set random start category
@@ -91,11 +106,31 @@ public class STGame {
     }
 
     public boolean checkWin(STPlayer player){
+        boolean magnetiteInHand = false;
+        boolean geophysicistInHand = false;
         boolean win = false;
         ArrayList <Object> hand = player.getHand();
+
         if (hand.size()==0){
+            winCondition = "no cards left";
             win = true;
         }
+        else{
+            for (Object card : hand){
+                STCard tcard = (STCard) card;
+                if (tcard.getTitle().toLowerCase().equals("magnetite")){
+                    magnetiteInHand = true;
+                }
+                if (tcard.getTitle().toLowerCase().equals("the geophysicist")){
+                    geophysicistInHand = true;
+                }
+            }
+            if (magnetiteInHand==true && geophysicistInHand==true){
+                winCondition = "both the magnetite and geophysicist cards";
+                win = true;
+            }
+        }
+
         return win;
     }
 
@@ -183,10 +218,11 @@ public class STGame {
         layout.ableHandButtons(false);
 
         if (player.getID()==humanplayerID){
-            layout.notifyUser("Human, you have won! Quit when you want");
+            layout.notifyUser("You have " + winCondition +
+                    ", you have won! Quit when you want");
         }
         else{
-            layout.notifyUser("Player: " + player.getID() + " has won! Accept defeat gracefully.");
+            layout.notifyUser("Player: " + (player.getID() + 1)+ " has " + winCondition + " they have won! Accept defeat gracefully.");
         }
     }
 
@@ -199,34 +235,65 @@ public class STGame {
         }
     }
 
-    public void playRound(){
+    public void playRound() {
 
         layout.ableHandButtons(false);
 
         //Check if One Player is left without skip true
-        if (checkResetPlayersSkip()==true) {
+        if (checkResetPlayersSkip() == true) {
             resetPlayedCard(getRandomCategory(), playedCard.getFileName());
             resetAllPlayerSkip();
             layout.updateLayout(playingCategory, playingCategoryValue, currentPlayer, playedCard.fileName, players);
         }
 
-        layout.updatePlayerIcons(players, currentPlayer);
+        if (checkWin(players[currentPlayer])) {
+            showWin(players[currentPlayer]);
+        } else {
 
-        //Check if player is skipable
-        if(players[currentPlayer].getPlayerSkip()==false) {
-            System.out.println("Player Turn: " + (currentPlayer +1));
-            //Check If human player
-            if (players[currentPlayer].getID() == humanplayerID) {
-                //Human Path
-                if (checkValidHand() == true) {
-                    //Valid Hand
+            layout.updatePlayerIcons(players, currentPlayer);
+
+            //Check if player is skipable
+            if (players[currentPlayer].getPlayerSkip() == false) {
+                System.out.println("Player Turn: " + (currentPlayer + 1));
+                //Check If human player
+                if (players[currentPlayer].getID() == humanplayerID) {
+                    //Human Path
+                    if (checkValidHand() == true) {
+                        //Valid Hand
+                        //Pause Game
+                        ActionListener task = new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                System.out.println("PAUSE");
+                                layout.notifyUser("It is your turn to play a card");
+                                layout.ableHandButtons(true);
+                            }
+                        };
+                        Timer timer = new Timer(5000, task);
+                        timer.setRepeats(false);
+                        timer.start();
+
+                        try {
+                            Thread.sleep(WAITTIME);
+                        } catch (InterruptedException ie) {
+                            ie.printStackTrace();
+                        }
+
+
+                    } else {
+                        //No valid hand
+                        playHumanNoValidCards();
+                    }
+                } else {
+                    //Bot path
+                    layout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
+                    //Simulate player deciding
                     //Pause Game
                     ActionListener task = new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             System.out.println("PAUSE");
-                            layout.notifyUser("It is your turn to play a card");
-                            layout.ableHandButtons(true);
+                            playBotTurn();
                         }
                     };
                     Timer timer = new Timer(5000, task);
@@ -239,21 +306,20 @@ public class STGame {
                         ie.printStackTrace();
                     }
 
-
-                } else {
-                    //No valid hand
-                    playHumanNoValidCards();
                 }
             } else {
-                //Bot path
-                layout.notifyUser("Player " + (currentPlayer + 1) + " is deciding");
-                //Simulate player deciding
+                if (currentPlayer == humanplayerID) {
+                    layout.notifyUser("You are still skipped!");
+                } else {
+                    layout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
+                }
                 //Pause Game
                 ActionListener task = new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("PAUSE");
-                        playBotTurn();
+                        updatePlayer();
+                        playRound();
                     }
                 };
                 Timer timer = new Timer(5000, task);
@@ -267,35 +333,8 @@ public class STGame {
                 }
 
             }
-        }
-        else{
-            if(currentPlayer == humanplayerID) {
-                layout.notifyUser("You are still skipped!");
-            }
-            else{
-                layout.notifyUser("Player " + (currentPlayer + 1) + " was skipped!");
-            }
-            //Pause Game
-            ActionListener task = new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("PAUSE");
-                    updatePlayer();
-                    playRound();
-                }
-            };
-            Timer timer = new Timer(5000, task);
-            timer.setRepeats(false);
-            timer.start();
-
-            try {
-                Thread.sleep(WAITTIME);
-            } catch (InterruptedException ie) {
-                ie.printStackTrace();
-            }
 
         }
-
     }
 
     private boolean checkResetPlayersSkip() {
