@@ -12,12 +12,11 @@ import java.util.Scanner;
  */
 //Todo: Make it pretty
     //Todo: Remove bug testing and prints
-    //Todo: check handpanel only able when wanted
 
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-    static final int NUM_OF_CARDS_TO_DEAL = 8;
+    static final int NUM_OF_CARDS_TO_DEAL = 3;
     String winCondition;
     int WAITTIME = 2000;
     int numOfPlayers;
@@ -95,7 +94,7 @@ public class STGame {
     public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
         //Bug test
         //dealMagAndGeop(players[0]);
-        //dealGEOLOGIST(players[0]);
+        dealGEOLOGIST(players[0]);
 
         //Inital Start
         layout=gameLayout;
@@ -452,11 +451,14 @@ public class STGame {
             //Remove selected card
             removeCardFromHand(players[currentPlayer], (STCard) selectedCard);
             //Notify user
+                layout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
+                prepareForNextTurn();
             }
             else{
                 STTrumpCard tcard = (STTrumpCard) selectedCard;
                 if(tcard.getSubtitle().equals("Change to trumps category of your choice")){
                     String geoSelection = getRandomCategory();
+                    layout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
                     playGeologist(geoSelection, tcard);
                 }
                 else{
@@ -464,9 +466,10 @@ public class STGame {
                     resetPlayedCard(tcard.getSubtitle(), selectedCard.getFileName());
                     //Remove card and Update currentPlayer
                     removeCardFromHand(players[currentPlayer], selectedCard);
+                    layout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
+                    prepareForNextTurn();
                 }
             }
-            layout.notifyUser("Player: " + (currentPlayer+1) + " has played a card");
         }
         else{
             //No valid Cards
@@ -476,9 +479,15 @@ public class STGame {
 
             System.out.println("No valid cards");
             layout.notifyUser("Player " + (currentPlayer + 1) + " has no valid cards to play and will be skipped");
+            prepareForNextTurn();
         }
+        //Update currentPlayer
 
 
+    }
+
+    private void prepareForNextTurn(){
+        //For only bots
         //Update currentPlayer
         int selectedPlayer = currentPlayer;
         updatePlayer();
@@ -508,8 +517,6 @@ public class STGame {
         } catch (InterruptedException ie) {
             ie.printStackTrace();
         }
-
-
     }
 
 
