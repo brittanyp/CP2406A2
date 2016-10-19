@@ -1,12 +1,10 @@
 package GUI;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 /**
  * Created by Brit on 9/11/2016.
  */
@@ -16,7 +14,7 @@ import java.util.Scanner;
 //Class dedicated to Super Trump Game, constructed by number of players and deck
 
 public class STGame {
-    static final int NUM_OF_CARDS_TO_DEAL = 3;
+    static final int NUM_OF_CARDS_TO_DEAL = 8;
     String winCondition;
     int WAITTIME = 2000;
     int numOfPlayers;
@@ -28,7 +26,8 @@ public class STGame {
     STCard playedCard;
     int dealerID;
     int currentPlayer = 0;
-    DefaultGameLayout layout;
+    GameLayout layout;
+    boolean gameOn;
 
     public STGame(int numOfPlayers, STDeck deck) {
         this.numOfPlayers = numOfPlayers;
@@ -91,13 +90,15 @@ public class STGame {
 
     }
 
-    public void initiateGame(JFrame topframe, DefaultGameLayout gameLayout ) {
+    public void initiateGame(GameLayout gameLayout ) {
         //Bug test
         //dealMagAndGeop(players[0]);
-        dealGEOLOGIST(players[0]);
+        //dealGEOLOGIST(players[0]);
 
         //Inital Start
         layout=gameLayout;
+        gameOn = true;
+
         //Set random start category
         String tempcategory=getRandomCategory();
         resetPlayedCard(tempcategory, "Slide66.jpg");
@@ -226,6 +227,8 @@ public class STGame {
         else{
             layout.notifyUser("Player: " + (player.getID() + 1)+ " has " + winCondition + " they have won! Accept defeat gracefully.");
         }
+        //Stop Game
+        gameOn=false;
     }
 
     private void updatePlayer(){
@@ -238,7 +241,8 @@ public class STGame {
     }
 
     public void playRound() {
-
+        //Quit button and winning
+        if (gameOn==true){
         layout.ableHandButtons(false);
 
         //Check if One Player is left without skip true
@@ -337,6 +341,7 @@ public class STGame {
             }
 
         }
+    }
     }
 
     private boolean checkResetPlayersSkip() {

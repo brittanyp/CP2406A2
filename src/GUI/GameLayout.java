@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Brit on 10/9/2016.
  */
-public class DefaultGameLayout extends JPanel {
+public class GameLayout extends JPanel {
     //Panels
     JPanel handPanel = new JPanel();
     JPanel iconPanel = new JPanel();
@@ -28,8 +28,8 @@ public class DefaultGameLayout extends JPanel {
     //Constants
     STGame GAME;
     JFrame UPPERFRAME;
-    DefaultGameLayout instanceOfLayout = this;
-    public DefaultGameLayout(JFrame topFrame, int numOfPlayers, STGame passedGame){
+    GameLayout instanceOfLayout = this;
+    public GameLayout(JFrame topFrame, int numOfPlayers, STGame passedGame){
 
         UPPERFRAME = topFrame;
         GAME = passedGame;
@@ -56,7 +56,9 @@ public class DefaultGameLayout extends JPanel {
         btnQuit.setPreferredSize(new Dimension(100, 50));
 
         lblGuide = new JTextArea("Welcome");
+        lblGuide.setEnabled(false);
         lblGuide.setMaximumSize(new Dimension(250,70));
+        lblGuide.setDisabledTextColor(Color.black);
 
         lblGuide.setFont(guideFont);
 
@@ -79,6 +81,7 @@ public class DefaultGameLayout extends JPanel {
         btnQuit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                passedGame.gameOn=false;
                 topFrame.dispose();
                 JFrame welcomeFrame = new MainFrame("ST - Welcome");
             }
@@ -251,7 +254,8 @@ public class DefaultGameLayout extends JPanel {
     public void ableAllComponents(boolean enable){
         Component[] components = this.getComponents();
         for(Component component : components){
-            component.setEnabled(enable);
+            if (component!=lblGuide){
+            component.setEnabled(enable);}
         }
         Component[] handpanelComponents = this.handPanel.getComponents();
         for(Component component: handpanelComponents){
@@ -292,7 +296,7 @@ public class DefaultGameLayout extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 btnStart.setVisible(false);
-                GAME.initiateGame(UPPERFRAME, instanceOfLayout);
+                GAME.initiateGame(instanceOfLayout);
                 GAME.playRound();
             }
         });

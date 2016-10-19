@@ -2,8 +2,7 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 /**
  * Created by Brit on 10/10/2016.
@@ -13,14 +12,13 @@ public class NumberFrame extends JFrame {
     private int numOfplayers;
     public NumberFrame(String title){
         super(title);
-        setSize(1000, 850);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("ST - Number of Players");
 
         numberPanel = new JPanel();
+        numberPanel.setPreferredSize(new Dimension(300,80));
         numberPanel.setLayout(new FlowLayout());
         JLabel lblNumPlayers = new JLabel("Enter Number of Players (3-5): ");
         JTextField txtNumPlayers = new JTextField(10);
@@ -31,6 +29,19 @@ public class NumberFrame extends JFrame {
         numberPanel.add(btnConfirmNumPlayers);
         numberPanel.add(lblNote);
         lblNote.setVisible(false);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                JFrame welcomeFrame = new MainFrame("ST - Welcome");
+            }
+        }
+        );
+
+
+
+
 
         btnConfirmNumPlayers.addActionListener(new ActionListener() {
             @Override
@@ -43,10 +54,15 @@ public class NumberFrame extends JFrame {
                     if (userInputInt >= 3 && userInputInt <=5){
                         validinput = true;
                     }
+                    else{
+                        lblNote.setVisible(true);
+                        txtNumPlayers.setText(null);
+                    }
                 }
                 catch (Exception er){
                     lblNote.setVisible(true);
                     validinput = false;
+                    txtNumPlayers.setText(null);
                 }
 
                 if(validinput==true){
@@ -70,6 +86,8 @@ public class NumberFrame extends JFrame {
         mainPane.add(numberPanel, BorderLayout.NORTH);
         pack();
     }
+
+
     private STGame beginNewGame(STDeck deck, int numofPlayers) {
         //Get number of players
         //Create new game

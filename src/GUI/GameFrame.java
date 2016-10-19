@@ -2,14 +2,12 @@ package GUI;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Brit on 10/9/2016.
  */
 public class GameFrame extends JFrame {
-    private DefaultGameLayout defaultGameLayout;
+    private GameLayout defaultGameLayout;
 
     public GameFrame(String title, int playersNum, STGame game) {
         super(title);
@@ -27,7 +25,7 @@ public class GameFrame extends JFrame {
         Container mainPane = getContentPane();
 
 
-        defaultGameLayout = new DefaultGameLayout(this, playersNum, game);
+        defaultGameLayout = new GameLayout(this, playersNum, game);
         mainPane.add(defaultGameLayout, BorderLayout.NORTH);
         pack();
 

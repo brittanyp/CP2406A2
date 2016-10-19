@@ -19,7 +19,7 @@ public class geologistMenuFrame extends JFrame implements ActionListener{
     STCard currentCard;
 
     public geologistMenuFrame(String title, STGame game, STCard card)
-            //DefaultGameLayout gameLayout
+            //GameLayout gameLayout
     {
         super(title);
         currentGame = game;

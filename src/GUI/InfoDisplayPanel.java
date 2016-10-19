@@ -54,6 +54,8 @@ public class InfoDisplayPanel extends JPanel {
         //Create J objects
         JLabel lblTitle = new JLabel("Information - " + selectedInfo);
         JTextArea lblInfo = new JTextArea(info);
+        lblInfo.setEnabled(false);
+        lblInfo.setDisabledTextColor(Color.black);
         JButton btnBack = new JButton("Back");
 
         //Create button functions

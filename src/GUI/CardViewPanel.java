@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  * Created by Brit on 10/10/2016.
  */
 public class CardViewPanel extends JPanel {
-    public CardViewPanel(JFrame topFrame,STCard card, STGame game, DefaultGameLayout gameLayout){
+    public CardViewPanel(JFrame topFrame,STCard card, STGame game, GameLayout gameLayout){
         String fileName = card.getFileName().trim();
 
         Dimension size = getPreferredSize();
