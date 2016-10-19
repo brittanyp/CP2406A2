@@ -246,7 +246,7 @@ public class GameLayout extends JPanel {
         });
     }
 
-    public void setStartnQuitButtonAble(){
+    public void setStartnQuitBtnAble(){
         btnStart.setEnabled(true);
         btnQuit.setEnabled(true);
     }
@@ -352,14 +352,5 @@ public class GameLayout extends JPanel {
 
         }
 
-    }
-
-
-    public JPanel getPlayer(JLabel lbl1, JLabel lbl2){
-        JPanel selectionCategoryPanel = new JPanel();
-        selectionCategoryPanel.setLayout(new FlowLayout());
-        selectionCategoryPanel.add(lbl1);
-        selectionCategoryPanel.add(lbl2);
-        return selectionCategoryPanel;
     }
 }

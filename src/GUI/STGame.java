@@ -92,7 +92,7 @@ public class STGame {
 
     public void initiateGame(GameLayout gameLayout ) {
         //Bug test
-        //dealMagAndGeop(players[0]);
+        //dealMagAndGeop(players[1]);
         //dealGEOLOGIST(players[0]);
 
         //Inital Start
@@ -225,7 +225,7 @@ public class STGame {
                     "\n you have won! Quit when you want");
         }
         else{
-            layout.notifyUser("Player: " + (player.getID() + 1)+ " has " + winCondition + " they have won! Accept defeat gracefully.");
+            layout.notifyUser("Player: " + (player.getID() + 1)+ " has " + winCondition + "\nthey have won! Accept defeat gracefully.");
         }
         //Stop Game
         gameOn=false;
@@ -861,12 +861,12 @@ public class STGame {
         return valid;
     }
 
-    public void selectPlayerPostion() {
+    public void selectPlayerPosition() {
         //Assigns human player to random position
         int playerPostion = new Random().nextInt(players.length);
         humanplayerID = playerPostion;
         //Todo: remove this, testing code
-        //humanplayerID = 1;
+        humanplayerID = 0;
     }
 
     public STPlayer getHumanPlayer() {
@@ -876,13 +876,6 @@ public class STGame {
 
     public int getDeckSize(){
         return deck.getDeckSize();
-    }
-
-
-    public int getBotCardSelection(int handSize) {
-        //returns a random integer in the range 0-handsize (exclusive max)
-        int randomInt = new Random().nextInt(handSize);
-        return randomInt;
     }
 
     public void chooseDealer() {

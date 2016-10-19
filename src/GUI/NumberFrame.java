@@ -39,10 +39,6 @@ public class NumberFrame extends JFrame {
         }
         );
 
-
-
-
-
         btnConfirmNumPlayers.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,8 +91,8 @@ public class NumberFrame extends JFrame {
         //Assign dealer for game
         game.chooseDealer();
         game.dealRandomCardsToEachPlayer();
-        game.selectPlayerPostion();
-        STPlayer humanPlayer = game.getHumanPlayer();
+        game.selectPlayerPosition();
+        //STPlayer humanPlayer = game.getHumanPlayer();
 
         return game;
     }
