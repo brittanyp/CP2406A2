@@ -9,7 +9,11 @@ import java.awt.event.ActionListener;
  * Created by Brit on 10/9/2016.
  */
 public class WelcomePanel extends JPanel {
-    public WelcomePanel(JFrame topFrame){
+    //Panel for welcome screen
+
+    JButton btnPlayGame;
+    JButton btnInfo;
+    public WelcomePanel(JFrame topFrame, boolean validFile){
         //Create Panel
         Dimension size = getPreferredSize();
         size.height = 250;
@@ -18,8 +22,8 @@ public class WelcomePanel extends JPanel {
         //Create J objects
         JLabel lblTitle = new JLabel("Super Trump!");
         JLabel lblSubTitle = new JLabel("#1 Game for Mineral Nerds! Probably!");
-        JButton btnPlayGame = new JButton("Play Game");
-        JButton btnInfo = new JButton("Information");
+        btnPlayGame = new JButton("Play Game");
+        btnInfo = new JButton("Information");
         JButton btnQuit = new JButton("Quit");
 
         //Create button functions
@@ -80,6 +84,11 @@ public class WelcomePanel extends JPanel {
         welcomeLayout.gridy = 3;
         add(btnQuit, welcomeLayout);
 
+        if (validFile==false){
+            btnPlayGame.setEnabled(false);
+            btnInfo.setEnabled(false);
+            btnPlayGame.setText("No File, No Game");
+        }
     }
 
     public JPanel getButtonPanel(JButton btn1, JButton btn2) {

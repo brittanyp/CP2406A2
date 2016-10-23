@@ -7,12 +7,12 @@ import java.awt.*;
  * Created by Brit on 10/9/2016.
  */
 public class GameFrame extends JFrame {
+    //Main Game Frame
     private GameLayout defaultGameLayout;
 
     public GameFrame(String title, int playersNum, STGame game) {
         super(title);
-        GameFrame currentFrame = this;
-        //Define
+        //Set Frame looks and function
         setSize(1300, 950);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -24,7 +24,7 @@ public class GameFrame extends JFrame {
         setLayout(new BorderLayout());
         Container mainPane = getContentPane();
 
-
+        //Create Panel
         defaultGameLayout = new GameLayout(this, playersNum, game);
         mainPane.add(defaultGameLayout, BorderLayout.NORTH);
         pack();

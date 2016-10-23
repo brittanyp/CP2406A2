@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Created by Brit on 9/11/2016.
  */
-//Class for Super Trump Card, extends on GUI.STCard
+//Class for Super Trump Game, represents a card
 
 public class STCard{
     public int id;

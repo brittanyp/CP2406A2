@@ -9,9 +9,10 @@ import java.awt.*;
  */
 
 public class MainFrame extends JFrame {
-    private WelcomePanel welcomePanel;
+    //Frame for the welcoming screen
 
-    public MainFrame(String title){
+    private WelcomePanel welcomePanel;
+    public MainFrame(String title, boolean validFile){
         super(title);
         //Define
         setSize(500, 300);
@@ -24,7 +25,8 @@ public class MainFrame extends JFrame {
         //Set layout manager
         setLayout(new BorderLayout());
         //Create swing items
-        welcomePanel = new WelcomePanel(this);
+        welcomePanel = new WelcomePanel(this, validFile);
+
 
         // Add swing items to content pane
         Container mainPane = getContentPane();

@@ -7,6 +7,8 @@ import java.awt.*;
  * Created by Brit on 10/9/2016.
  */
 public class InfoDisplayFrame extends JFrame{
+    //Frame to display Information
+
     private InfoDisplayPanel infoDisplayPanel;
 
     public InfoDisplayFrame(String title, String infoType){

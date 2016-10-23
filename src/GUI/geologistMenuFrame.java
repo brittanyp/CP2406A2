@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
  */
 
 public class geologistMenuFrame extends JFrame implements ActionListener{
+    //Frame triggered when human player plays geologist card
+
+    //Define Jbuttons and STGame and STCard
     JButton btnHardness;
     JButton btnSpecificGravity;
     JButton btnCleavage;
@@ -19,12 +22,11 @@ public class geologistMenuFrame extends JFrame implements ActionListener{
     STCard currentCard;
 
     public geologistMenuFrame(String title, STGame game, STCard card)
-            //GameLayout gameLayout
     {
         super(title);
         currentGame = game;
         currentCard = card;
-        //Define
+        //Set Frame look
         setSize(700, 700);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -50,6 +52,7 @@ public class geologistMenuFrame extends JFrame implements ActionListener{
         geoMenuLayout.add(btnCrustalAbundance);
         geoMenuLayout.add(btnEconomicValue);
 
+        //Add functions to buttons
         btnHardness.addActionListener(this);
         btnSpecificGravity.addActionListener(this);
         btnCleavage.addActionListener(this);
@@ -81,6 +84,5 @@ public class geologistMenuFrame extends JFrame implements ActionListener{
         }
         dispose();
         currentGame.playGeologist(category, currentCard);
-        //resetcard with hardness
     }
 }

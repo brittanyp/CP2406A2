@@ -9,9 +9,11 @@ import java.awt.event.ActionListener;
  * Created by Brit on 10/9/2016.
  */
 public class InfoMenuPanel extends  JPanel{
-
+    //Panel for information menu
+    InfoMenuPanel panel;
         public InfoMenuPanel(JFrame topFrame){
             //Create Panel
+            panel = this;
             Dimension size = getPreferredSize();
             size.height = 250;
             setPreferredSize(size);
@@ -29,7 +31,7 @@ public class InfoMenuPanel extends  JPanel{
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     topFrame.dispose();
-                    JFrame welcomeFrame = new MainFrame("ST - Welcome");
+                    JFrame welcomeFrame = new MainFrame("ST - Welcome", true);
                 }
             });
 

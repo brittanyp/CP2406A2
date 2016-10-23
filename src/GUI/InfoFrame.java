@@ -7,6 +7,7 @@ import java.awt.*;
  * Created by Brit on 10/9/2016.
  */
 public class InfoFrame extends JFrame {
+    //Frame for information menu
     private InfoMenuPanel infoMenuPanel;
 
     public InfoFrame(String title) {
